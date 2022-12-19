@@ -1,0 +1,8 @@
+---
+- name: configure and install automation controller
+  become: true
+  hosts:
+    - controller
+  roles:
+    - rhaap
+    - ansible_ssa.general.controller_setup

@@ -1,0 +1,7 @@
+---
+- name: configure automation hub content
+  become: true
+  hosts:
+    - automation_hub
+  roles:
+    - ansible_ssa.general.automationhub_content

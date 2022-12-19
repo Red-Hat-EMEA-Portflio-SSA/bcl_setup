@@ -1,0 +1,28 @@
+---
+- name: create bastion instance locally
+  gather_facts: false
+  hosts:
+  - localhost
+
+  tasks:
+    - name: deploy Bastion Host
+      ansible.builtin.include_role:
+        name: ansible_ssa.general.instance
+      vars:
+        instance_name: "{{ bastion_instance_name }}"
+        instance_group: "bastion"
+        instance_parameters: "{{ bastion_instance_parameters | default ({}) }}"
+      when: bastion_enable | default ('false') | bool
+
+- name: test connection to bastion host
+  hosts:
+    - bastion
+  gather_facts: false
+  tasks:
+    - name: test SSH connection
+      ansible.builtin.wait_for_connection:
+        timeout: 300
+      when:
+        - not remove | default ('false') | bool
+        - bastion_enable | default ('false') | bool
+

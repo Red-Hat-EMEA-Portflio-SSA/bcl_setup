@@ -1,0 +1,6 @@
+---
+- name: configure automation controller content
+  hosts:
+    - localhost
+  roles:
+    - ansible_ssa.general.controller_content

@@ -1,0 +1,21 @@
+---
+ansible-navigator:
+  execution-environment:
+    environment-variables:
+      pass:
+      - CONTROLLER_HOST
+      - CONTROLLER_USERNAME
+      - CONTROLLER_PASSWORD
+      - CONTROLLER_VERIFY_SSL
+      - VMWARE_HOST
+      - VMWARE_USER
+      - VMWARE_PASSWORD
+    image: quay.io/redhat_emp1/ee-ansible-ssa:unstable
+    pull:
+      policy: always
+  logging:
+    append: true
+    file: /tmp/navigator/ansible-navigator_bcl.log
+  mode: stdout
+  playbook-artifact:
+    enable: false
