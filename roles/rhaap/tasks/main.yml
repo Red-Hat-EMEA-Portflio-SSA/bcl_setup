@@ -1,0 +1,8 @@
+---
+- name: copy RHAAP installer to controller
+  ansible.builtin.copy:
+    src: ansible-automation-platform-setup-{{ controller_version }}.tar.gz
+    dest: /root/
+    owner: root
+    group: root
+    mode: 0644

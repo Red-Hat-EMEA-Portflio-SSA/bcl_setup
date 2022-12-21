@@ -1,0 +1,13 @@
+---
+- name: install named
+  ansible.builtin.yum:
+    name: bind-chroot
+    state: present
+
+# - name: configure named
+
+- name: start named
+  ansible.builtin.systemd:
+    name: bind
+    state: started
+    enabled: true

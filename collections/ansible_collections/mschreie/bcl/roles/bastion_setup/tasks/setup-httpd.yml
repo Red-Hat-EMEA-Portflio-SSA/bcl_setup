@@ -1,0 +1,15 @@
+---
+- name: install httpd
+  ansible.builtin.yum:
+    name: 
+      - httpd.x86_64
+      - httpd-core.x86_64
+    state: present
+
+# - name: configure httpd
+
+- name: start httpd
+  ansible.builtin.systemd:
+    name: httpd
+    state: started
+    enabled: true

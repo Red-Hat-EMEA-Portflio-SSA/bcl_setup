@@ -1,0 +1,24 @@
+---
+- name: install nfs
+  ansible.builtin.yum:
+    name: 
+     - nfs-utils.x86_64
+     - nfsv4-client-utils.x86_64
+     - rpcbind
+    state: present
+
+- name: ensure /export dir exists
+  ansible.builtin.file:
+    name: /export
+    state: directory
+
+# - name: configure nfs
+
+- name: start nfs
+  ansible.builtin.systemd:
+    name: “{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - rpcbind
+    - nfs-server

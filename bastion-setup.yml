@@ -4,5 +4,4 @@
   hosts:
     - bastion
   roles:
-    - rhaap
-    - ansible_ssa.general.bastion_setup
+    - mschreie.bcl.bastion_setup

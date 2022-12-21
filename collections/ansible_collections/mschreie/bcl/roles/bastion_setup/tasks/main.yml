@@ -1,0 +1,27 @@
+---
+- name: setup prerequisites
+  import_tasks: prereq.yml
+
+- name: secure system
+  import_tasks: security.yml
+
+- name: setup time service
+  import_tasks: setup-chrony.yml
+
+- name: setup named server
+  import_tasks: setup-named.yml
+  when: bastion_named_enable | bool
+
+- name: setup dhcp server
+  import_tasks: setup-dhcpd.yml
+  when: bastion_dhcpd_enable | bool
+
+- name: setup http server 
+  import_tasks: setup-httpd.yml
+  when: bastion_httpd_enable | bool
+
+- name: setup nfs server 
+  import_tasks: setup-nfsd.yml
+  when: bastion_nfsd_enable | bool
+
+
