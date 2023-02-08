@@ -5,6 +5,7 @@
     state: present
 
 # - name: configure chronyd
+# default configuration good enough
 
 - name: start chronyd
   ansible.builtin.systemd:

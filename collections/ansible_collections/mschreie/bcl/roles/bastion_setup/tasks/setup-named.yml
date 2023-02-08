@@ -1,10 +1,30 @@
 ---
 - name: install named
   ansible.builtin.yum:
-    name: bind-chroot
+    name: 
+      - bind-chroot
+      - bind-utils
     state: present
 
-# - name: configure named
+- name: configure named.conf
+  ansible.builtin.template:
+    src: named.conf.j2  
+    dest: /etc/named.conf
+    group: named
+    setype: named_conf_t
+    mode: 0640
+
+- name: provide initial zone files
+  ansible.builtin.template:
+    src: zone.j2
+    dest: /var/named/{{ item }}.zone
+  loop: "{{ bastion_named_zones }}"
+
+- name: provide initial zone files
+  ansible.builtin.template:
+    src: reverse_zone.j2  
+    dest: /var/named/{{ item }}.zone
+  loop: "{{ bastion_named_revzones }}"
 
 - name: start named
   ansible.builtin.systemd:

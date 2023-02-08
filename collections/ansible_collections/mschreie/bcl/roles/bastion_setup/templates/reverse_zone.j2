@@ -1,0 +1,13 @@
+; base zone file for example.com
+$TTL 1d    ; default TTL for zone
+$ORIGIN {{ zone }} ; base domain-name
+; Start of Authority RR defining the key characteristics of the zone (domain)
+@         IN      SOA   {{ bastion_named_fqservername }}. (
+                                {{ serial }} ; serial number
+                                12h        ; refresh
+                                15m        ; update retry
+                                3w         ; expiry
+                                2h         ; minimum
+                                )
+           IN      NS   {{ bastion_named_fqservername }}. 
+{{ bastion_named_serverreverseip }}.in-addr.arpa.   IN PTR  {{ bastion_named_fqservername }}.  
