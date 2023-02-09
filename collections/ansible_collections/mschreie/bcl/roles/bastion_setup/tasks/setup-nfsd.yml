@@ -3,7 +3,6 @@
   ansible.builtin.yum:
     name: 
      - nfs-utils.x86_64
-     - nfsv4-client-utils.x86_64
      - rpcbind
     state: present
 
@@ -16,9 +15,10 @@
 
 - name: start nfs
   ansible.builtin.systemd:
-    name: “{{ item }}"
+    name: "{{ item }}"
     state: started
     enabled: true
   loop:
     - rpcbind
     - nfs-server
+

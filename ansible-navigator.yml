@@ -18,4 +18,6 @@ ansible-navigator:
     file: /tmp/navigator/ansible-navigator_bcl.log
   mode: stdout
   playbook-artifact:
-    enable: false
+    enable: True
+    replay: /tmp/navigator/artefacts/ansible_artefact.json
+    save-as: /tmp/navigator/artefacts/ansible_artefact.jsonl

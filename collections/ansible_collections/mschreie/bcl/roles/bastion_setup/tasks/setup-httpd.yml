@@ -3,7 +3,7 @@
   ansible.builtin.yum:
     name: 
       - httpd.x86_64
-      - httpd-core.x86_64
+      - httpd-tools.x86_64
     state: present
 
 # - name: configure httpd

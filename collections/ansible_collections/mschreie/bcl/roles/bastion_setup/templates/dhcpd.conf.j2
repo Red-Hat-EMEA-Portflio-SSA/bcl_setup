@@ -1,0 +1,28 @@
+# dhcpd.conf
+
+#
+# option definitions common to all supported networks...
+option domain-name "{{ bastion_named_domain }}";
+option domain-name-servers {{ bastion_named_serverip }}; 
+
+default-lease-time 600;
+max-lease-time 7200;
+
+# Use this to enble / disable dynamic dns updates globally.
+#ddns-update-style none;
+
+# If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+authoritative;
+
+# Use this to send dhcp log messages to a different log file (you also
+# have to hack syslog.conf to complete the redirection).
+log-facility local7;
+
+{% for subnet in bastion_dhcpd_subnets %}
+subnet {{ subnet.name }} netmask {{ subnet.mask }} {
+  {% if subnet.range_start is defined %} range {{ subnet.range_start }} {{ subnet.range_stop }} ;  
+  option routers {{ subnet.router }} ;
+  {% endif %}
+}
+{% endfor %}

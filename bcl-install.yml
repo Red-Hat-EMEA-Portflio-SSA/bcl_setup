@@ -1,5 +1,12 @@
 ---
 - import_playbook: bastion-instance.yml
+  when:
+    - bastion_enable | default ('false') | bool
+- import_playbook: bastion-setup.yml
+  when: 
+    - not remove | default ('false') | bool
+    - bastion_enable | default ('false') | bool
+ 
 # run automation hub setup early, since it takes care of some requirements
 - import_playbook: controller-instance.yml
 # run automation hub setup early, since it takes care of some requirements
@@ -14,5 +21,6 @@
   when:
     - not remove | default ('false') | bool
     - controller_ah_enable | default ('false') | bool
+
 - import_playbook: controller-content.yml
   when: not remove | default ('false') | bool

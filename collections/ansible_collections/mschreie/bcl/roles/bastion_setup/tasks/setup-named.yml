@@ -6,6 +6,11 @@
       - bind-utils
     state: present
 
+- name: define serial number
+  ansible.builtin.set_fact: 
+  # this creates new/higher serial every 15 minutes
+     serial:  "{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}{{  (((ansible_date_time.hour|int) * 60 + (ansible_date_time.minute|int)) // 14.40)|int }}"
+
 - name: configure named.conf
   ansible.builtin.template:
     src: named.conf.j2  
@@ -28,6 +33,6 @@
 
 - name: start named
   ansible.builtin.systemd:
-    name: bind
+    name: named
     state: started
     enabled: true

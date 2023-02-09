@@ -4,7 +4,13 @@
     name: dhcp-server
     state: present
 
-# - name: configure dhcpd
+- name: configure dhcpd
+  ansible.builtin.template:
+    src: dhcpd.conf.j2  
+    dest: /etc/dhcp/dhcpd.conf
+    group: root
+    setype: dhcp_etc_t
+    mode: 0644
 
 - name: start dhcpd
   ansible.builtin.systemd:
