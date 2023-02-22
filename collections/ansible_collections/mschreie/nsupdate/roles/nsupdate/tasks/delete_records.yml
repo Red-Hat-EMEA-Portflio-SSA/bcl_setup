@@ -11,6 +11,7 @@
   when:
     - rrtype == "A"  or rrtype == "both"
   delegate_to: "{{ nameserver }}"
+  notify: Sync dns records into zone files
 
 - name: Remove REVERS DNS record on local dns server
   community.general.nsupdate:
@@ -25,5 +26,6 @@
   when:
     - rrtype == "PTR"  or rrtype == "both"
   delegate_to: "{{ nameserver }}"
+  notify: Sync dns records into zone files
      
 

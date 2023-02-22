@@ -1,2 +1,7 @@
 ---
 # handlers file for nsupdate
+
+- name: Sync dns records into zone files
+  command: rndc sync -clean
+  delegate_to: "{{ nameserver }}"
+

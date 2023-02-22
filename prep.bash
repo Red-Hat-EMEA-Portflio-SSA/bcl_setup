@@ -18,3 +18,5 @@ echo ". ./cic_aap_lab/env.sh"
 echo "then run" 
 echo "ansible-navigator run bcl-install.yml -e @cic_aap_lab/extra_vars.yml -e @cic_aap_lab/vaulted_vars.yml"
 
+echo "ansible-navigator run bcl-vmw-setup.yml -e @cic_aap_lab/extra_vars.yml -e @cic_aap_lab/vaulted_vars.yml" --eei localhost/bcl-ov:3 --pp never
+

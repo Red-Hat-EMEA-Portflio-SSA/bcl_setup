@@ -20,6 +20,18 @@
     setype: named_conf_t
     mode: 0640
 
+- name: assure logfiles be present
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: touch
+    mode: 0660
+    owner: named
+    group: named
+    setype: named_log_t
+  loop:
+    - "/var/log/named.ddnsupdate.log"
+    - "/var/log/named.auth.info"
+
 - name: provide initial zone files
   ansible.builtin.template:
     src: zone.j2

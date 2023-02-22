@@ -39,6 +39,23 @@ logging {
                 file "data/named.run";
                 severity dynamic;
         };
+        channel update_log {
+              file "/var/log/named.ddnsupdate.log";
+              severity  debug 3;
+              print-category yes;
+              print-severity yes;
+              print-time     yes;
+        };
+        channel security_info    {
+              file "/var/log/named.auth.info";
+              severity  info;
+              print-category yes;
+              print-severity yes;
+              print-time     yes;
+        };
+
+         category update { update_log; };
+         category security { security_info; };
 };
 
 zone "." IN {
