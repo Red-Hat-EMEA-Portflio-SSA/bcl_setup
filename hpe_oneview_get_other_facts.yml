@@ -1,0 +1,82 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  collections:
+    - ansible.controller
+
+  tasks:
+    - name: Add OneView Host to inventory
+      add_host:
+        name: "{{ item.name }}"
+        ansible_host: "{{ item.host_ip | default (omit)  }}"
+        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
+      loop: "{{ inventory_hosts }}"
+
+    - name: Add OneView Host to inventory
+      add_host:
+        name: "{{ item.name }}"
+        ansible_host: "{{ item.host_ip | default (omit)  }}"
+        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
+        ilo_ip: "{{ item.ilo_ip | default (omit) }}"
+        groups: 
+          - "esx_hosts"
+          - "oneview_targets"
+      loop: "{{ oneview_machines }}"
+
+- hosts: esx_hosts
+  gather_facts: false
+
+  collections:
+    - hpe.oneview
+
+  tasks:
+    - name: Gather Oneview version facts
+      hpe.oneview.oneview_version_facts:
+        hostname: "{{ oneview_host }}"
+        username: "{{ oneview_username }}"
+        password: "{{ oneview_password }}"
+        auth_login_domain: "{{ oneview_domain }}"
+        api_version: "{{ oneview_apiversion }}"
+
+      delegate_to: localhost
+
+    - debug: var=version
+
+    - name: Gather user facts
+      hpe.oneview.oneview_user_facts:
+        hostname: "{{ oneview_host }}"
+        username: "{{ oneview_username }}"
+        password: "{{ oneview_password }}"
+        auth_login_domain: "{{ oneview_domain }}"
+        api_version: "{{ oneview_apiversion }}"
+
+      delegate_to: localhost
+
+    - debug: var=users
+
+    - name: Gather Server Hardware facts
+      hpe.oneview.oneview_server_hardware_facts:
+        hostname: "{{ oneview_host }}"
+        username: "{{ oneview_username }}"
+        password: "{{ oneview_password }}"
+        auth_login_domain: "{{ oneview_domain }}"
+        api_version: "{{ oneview_apiversion }}"
+
+      delegate_to: localhost
+
+    - debug: var=server_hardwares
+
+    - name: Gather Server Profile facts
+      hpe.oneview.oneview_server_profile_facts:
+        hostname: "{{ oneview_host }}"
+        username: "{{ oneview_username }}"
+        password: "{{ oneview_password }}"
+        auth_login_domain: "{{ oneview_domain }}"
+        api_version: "{{ oneview_apiversion }}"
+
+        name: bcl1
+
+      delegate_to: localhost
+
+    - debug: var=server_profiles

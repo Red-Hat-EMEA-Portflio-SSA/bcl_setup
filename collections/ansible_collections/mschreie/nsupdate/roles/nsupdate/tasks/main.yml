@@ -1,0 +1,14 @@
+---
+# tasks file for nsupdate
+- name: get session key for nsupdate
+  import_tasks: getsecret.yml
+
+- name: add records to dns
+  import_tasks: add_records.yml
+  when:
+    - instruction == "add" 
+
+- name: remove records from dns
+  import_tasks: delete_records.yml
+  when:
+    - instruction == "remove" 

@@ -53,13 +53,17 @@ include "/etc/named.root.key";
 zone "{{ zone }}" IN {
 	type master;
 	file "{{ zone }}.zone";
-	allow-update { none; };
+        // enables updates via session key 
+        // stored in:     /var/run/named/session.key
+        // keyname:       “local-ddns”
+        // key algorithm: HMAC-SHA256
+	update-policy local ;  
 };
 {% endfor %}
 {% for zone in bastion_named_revzones %}
 zone "{{ zone }}" IN {
 	type master;
 	file "{{ zone }}.zone";
-	allow-update { none; };
+	update-policy local ;  
 };
 {% endfor %}

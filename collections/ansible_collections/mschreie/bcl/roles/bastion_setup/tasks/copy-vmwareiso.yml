@@ -1,0 +1,22 @@
+---
+## Prepare bastion host
+## run this best from cmd-line like this
+##   ansible-playbook -i invetory/hosts --ask-pass prep_bastion_host.yml
+##   this will ask for root password of bastion host
+
+
+- name: assure destination directory to be in place
+  ansible.builtin.file: 
+    path: "{{ bastion_iso_dir }}"
+    state: directory
+    modification_time: preserve
+    access_time: preserve
+  become: true
+
+- name: assure esxi iso file is on bastion host
+  ansible.builtin.copy: 
+    dest: "{{ bastion_iso_dir }}"
+    src: "{{ local_vmware_isoimage }}"
+    local_follow: false
+  become: true
+

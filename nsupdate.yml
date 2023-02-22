@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  collections:
+    - ansible.posix 
+    - community.general
+
+  tasks:
+    - name: include nsupdate
+      ansible.builtin.include_role: 
+        name: mschreie.nsupdate.nsupdate
+      vars:
+        record: "{{ item.record }}"
+        value:  "{{ item.value }}"
+        rrtype: "{{ item.rrtype }}"
+        instruction: "{{ item.instruction }}"
+        nameserver: "{{ item.nameserver }}"
+      loop: "{{ bastion_named_records }}"
+

@@ -1,0 +1,23 @@
+---
+- hosts: esx_hosts
+  gather_facts: false
+  serial: 1
+
+  collections:
+    - hpe.oneview
+    - ansible.posix 
+
+  tasks:
+  - name: debug bastion_host ipaddress
+    debug:
+     var: hostvars.bastion_host.ansible_host
+
+  - name: Connect the host(s)
+    vmware.vmware_rest.vcenter_host:
+      hostname: "{{ host_ip  }}"
+      user_name: "root"
+      password: "{{ esxi_rootpw }}"
+      thumbprint_verification: NONE
+      folder: '{{ my_host_folder.folder }}'
+    delegate_to: localhost
+

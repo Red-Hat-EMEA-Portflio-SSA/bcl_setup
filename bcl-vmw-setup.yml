@@ -1,0 +1,69 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  collections:
+    - ansible.controller
+    - ansible.utils
+    - ansible.core
+
+  tasks:
+    - name: Add OneView Host to inventory
+      add_host:
+        name: "{{ item.name }}"
+        ansible_host: "{{ item.host_ip | default (omit)  }}"
+        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
+      loop: "{{ inventory_hosts }}"
+
+    - name: Add OneView Host to inventory
+      add_host:
+        name: "{{ item.name }}"
+        ansible_host: "{{ item.host_ip | default (omit)  }}"
+        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
+        ilo_ip: "{{ item.ilo_ip | default (omit) }}"
+        host_bootproto: "{{ item.host_bootproto | default (omit) }}"
+        host_ip: "{{ item.host_ip | default (omit) }}"
+        host_mask: "{{ item.host_mask | default (omit) }}"
+        host_gw: "{{ item.host_gw | default (omit) }}"
+        host_nameserver: "{{ item.host_nameserver | default (omit) }}"
+        groups: 
+          - "esx_hosts"
+          - "oneview_targets"
+      loop: "{{ oneview_machines }}"
+
+    - name: Add additional Host to inventory
+      add_host:
+        name: "{{  lookup('ansible.builtin.vars', item + '_instance_name') }}"
+        ansible_host: "{{ (lookup('ansible.builtin.vars', item + '_instance_parameters')).vmware_ip_address }}"
+      loop: 
+        - bastion
+        - controller_ah
+        - controller
+
+- import_playbook: nsupdate.yml
+  when:
+#    - bastion_enable | default ('false') | bool
+    - not remove | default ('false') | bool
+
+- import_playbook: oneview-config.yml
+  when:
+#    - oneview_enable | default ('false') | bool
+    - not remove | default ('false') | bool
+
+- import_playbook: oneview-unconfig.yml
+  when:
+#    - oneview_enable | default ('false') | bool
+    - remove | default ('false') | bool
+
+
+- import_playbook: vmware-iso-prep.yml
+#  when:
+#    - bastion_enable | default ('false') | bool
+
+- import_playbook: vmware-iso-boot.yml
+#  when:
+#    - bastion_enable | default ('false') | bool
+
+- import_playbook: vcenter-addhost.yml
+#  when:
+#    - bastion_enable | default ('false') | bool

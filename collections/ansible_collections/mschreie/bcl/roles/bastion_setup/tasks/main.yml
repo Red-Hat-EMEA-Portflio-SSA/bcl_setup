@@ -20,6 +20,14 @@
   import_tasks: setup-httpd.yml
   when: bastion_httpd_enable | bool
 
+- name: setup iso management 
+  import_tasks: setup-isomgt.yml
+  when: bastion_httpd_enable | bool
+
+- name: copy esxi iso to batsion 
+  import_tasks: copy-vmwareiso.yml
+  when: bastion_httpd_enable | bool
+
 - name: setup nfs server 
   import_tasks: setup-nfsd.yml
   when: bastion_nfsd_enable | bool

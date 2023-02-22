@@ -4,6 +4,7 @@
     name: 
       - bind-chroot
       - bind-utils
+      - python3-dns
     state: present
 
 - name: define serial number
@@ -34,5 +35,5 @@
 - name: start named
   ansible.builtin.systemd:
     name: named
-    state: started
+    state: restarted
     enabled: true
