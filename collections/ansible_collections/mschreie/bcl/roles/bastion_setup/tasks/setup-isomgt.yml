@@ -21,11 +21,14 @@
 
 - name: assure destination directory to be in place
   file: 
-    path: "{{ bastion_iso_dir }}"
+    path: "{{ item }}"
     state: directory
     modification_time: preserve
     access_time: preserve
   become: true
+  loop:
+    - "{{ bastion_iso_dir }}"
+    - "{{ bastion_firmware_dir }}"
 
 - name: permit traffic in default zone for http service
   ansible.posix.firewalld:
