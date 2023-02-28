@@ -15,7 +15,7 @@
         ansible_connection: "{{ item.ansible_connection | default (omit) }}"
       loop: "{{ inventory_hosts }}"
 
-    - name: Add OneView Host to inventory
+    - name: Add physical hosts to inventory
       add_host:
         name: "{{ item.name }}"
         ansible_host: "{{ item.host_ip | default (omit)  }}"
@@ -39,6 +39,7 @@
         - bastion
         - controller_ah
         - controller
+        - vcenter
 
 - import_playbook: nsupdate.yml
   when:
