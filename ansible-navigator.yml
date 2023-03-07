@@ -10,7 +10,8 @@ ansible-navigator:
       - VMWARE_HOST
       - VMWARE_USER
       - VMWARE_PASSWORD
-    image: quay.io/redhat_emp1/ee-ansible-ssa:unstable
+        #image: quay.io/redhat_emp1/ee-ansible-ssa:unstable
+    image: quay.io/redhat_emp1/ee-ansible-ssa:latest
     pull:
       policy: always
   logging:

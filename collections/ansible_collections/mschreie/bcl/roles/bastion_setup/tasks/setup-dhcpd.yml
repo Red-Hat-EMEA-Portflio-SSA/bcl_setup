@@ -4,6 +4,23 @@
     name: dhcp-server
     state: present
 
+- name: read session key from bastion host
+  ansible.builtin.slurp:
+    src: /var/run/named/session.key
+  register: sessionkeyfile
+
+- name: from session key to dhcpd.conf compatible format
+  set_fact: 
+    sessionkey_entry: "{{ sessionkeyfile['content'] | b64decode
+      | regex_replace ('\"','', multiline=true)
+      }}"
+
+- name: debug sessionkeys
+  debug:
+    var: sessionkey_entry
+  when:
+    - debug | default ('false') | bool
+
 - name: configure dhcpd
   ansible.builtin.template:
     src: dhcpd.conf.j2  
@@ -11,6 +28,8 @@
     group: root
     setype: dhcp_etc_t
     mode: 0644
+  vars:
+    sessionkey: "{{ sessionkey_entry }}"
 
 - name: start dhcpd
   ansible.builtin.systemd:

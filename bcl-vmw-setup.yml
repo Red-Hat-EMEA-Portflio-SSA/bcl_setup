@@ -23,6 +23,8 @@
         ilo_ip: "{{ item.ilo_ip | default (omit) }}"
         host_bootproto: "{{ item.host_bootproto | default (omit) }}"
         host_ip: "{{ item.host_ip | default (omit) }}"
+        host_nic: "{{ item.host_nic | default (omit) }}"
+        host_vlan: "{{ item.host_vlan | default (omit) }}"
         host_mask: "{{ item.host_mask | default (omit) }}"
         host_gw: "{{ item.host_gw | default (omit) }}"
         host_nameserver: "{{ item.host_nameserver | default (omit) }}"
@@ -43,28 +45,30 @@
 
 - import_playbook: nsupdate.yml
   when:
-#    - bastion_enable | default ('false') | bool
     - not remove | default ('false') | bool
 
 - import_playbook: oneview-config.yml
   when:
-#    - oneview_enable | default ('false') | bool
     - not remove | default ('false') | bool
+
+- import_playbook: vmware-iso-prep.yml
+  when:
+    - not remove | default ('false') | bool
+
+- import_playbook: vmware-iso-boot.yml
+  when:
+    - not remove | default ('false') | bool
+
+- import_playbook: vcenter-prepare.yml
+  when:
+    - not remove | default ('false') | bool
+
+# remove
+- import_playbook: vcenter-unprepare.yml
+  when:
+    - remove | default ('false') | bool
 
 - import_playbook: oneview-unconfig.yml
   when:
-#    - oneview_enable | default ('false') | bool
     - remove | default ('false') | bool
 
-
-- import_playbook: vmware-iso-prep.yml
-#  when:
-#    - bastion_enable | default ('false') | bool
-
-- import_playbook: vmware-iso-boot.yml
-#  when:
-#    - bastion_enable | default ('false') | bool
-
-- import_playbook: vcenter-addhost.yml
-#  when:
-#    - bastion_enable | default ('false') | bool

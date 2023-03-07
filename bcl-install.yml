@@ -24,3 +24,8 @@
 
 - import_playbook: controller-content.yml
   when: not remove | default ('false') | bool
+
+- import_playbook: nsupdate.yml
+  when:
+#    - bastion_enable | default ('false') | bool
+    - not remove | default ('false') | bool

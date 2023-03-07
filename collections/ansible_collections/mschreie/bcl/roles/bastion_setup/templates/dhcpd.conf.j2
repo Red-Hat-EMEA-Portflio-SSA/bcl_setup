@@ -14,7 +14,7 @@ max-lease-time 7200;
 # If this DHCP server is the official DHCP server for the local
 # network, the authoritative directive should be uncommented.
 authoritative;
-ping true;
+ping-check true;
 
 # Update Nameserver
 ddns-updates on;
@@ -22,25 +22,22 @@ ddns-update-style standard;
 ddns-domainname "{{ bastion_named_domain }}";
 ignore client-updates;
 
-include "/var/run/named/session.key"; 
+{{ sessionkey }}
 
 {% for zone in bastion_named_zones %}
 zone {{ zone }} {
-        // enables updates via session key 
-        // stored in:     /var/run/named/session.key
-        // key algorithm: HMAC-SHA256
+        # enables updates via session key 
+        # stored in:     /var/run/named/session.key
+        # key algorithm: HMAC-SHA256
          primary 127.0.0.1;
-         key “local-ddns”;
-};
+         key local-ddns;
+}
 {% endfor %}
 {% for zone in bastion_named_revzones %}
 zone {{ zone }} {
-        // enables updates via session key 
-        // stored in:     /var/run/named/session.key
-        // key algorithm: HMAC-SHA256
          primary 127.0.0.1;
-         key “local-ddns”;
-};
+         key local-ddns;
+}
 {% endfor %}
 
 # Use this to send dhcp log messages to a different log file (you also

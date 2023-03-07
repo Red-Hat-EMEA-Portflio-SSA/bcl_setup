@@ -12,6 +12,8 @@
     debug:
      var: hostvars.bastion_host.ansible_host
 
+     ##  - name: wait for system to be up and running
+
   - name: Connect the host(s)
     vmware.vmware_rest.vcenter_host:
       hostname: "{{ host_ip  }}"
