@@ -1,0 +1,52 @@
+  name: "{{ inventory_hostname }}"
+  serverHardwareName: "{{ inventory_hostname }}.hpintelco.org"
+  serverHardwareTypeName: "{{ server_hardware_type_name }}"
+  managementProcessor: 
+    manageMp: false
+  bios:
+    manageBios: true
+  boot:
+    order:
+      - HardDisk
+      - CD
+      - USB
+      - PXE
+    manageBoot: false
+  bootMode:
+    manageMode: true
+    mode: "BIOS"
+    pxeBootPolicy: null
+    secureBoot: "Unmanaged"
+  localStorage:
+    controllers:
+      - mode: Mixed
+        deviceSlot: Embedded
+        initialize: true
+        logicalDrives:
+          - name: Boot
+            bootable: false
+            raidLevel: RAID1
+            accelerator: Unmanaged
+            driveNumber: 1
+            numSpareDrives: null
+            driveTechnology: SasHdd
+            sasLogicalJBODId: null
+            numPhysicalDrives: 2
+          - name: Data
+            bootable: false
+            raidLevel: RAID6
+            accelerator: Unmanaged
+            driveNumber: 1
+            numSpareDrives: null
+            driveTechnology: SasHdd
+            sasLogicalJBODId: null
+            numPhysicalDrives: 6
+        driveWriteCache: Unmanaged
+        importConfiguration: false
+        predictiveSpareRebuild: Unmanaged
+    reapplyState: NotApplying
+    sasLogicalJBODs: []
+  firmware:
+    manageFirmware: false
+  osDeploymentSettings: null
+

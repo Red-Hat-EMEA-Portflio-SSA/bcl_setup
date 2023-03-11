@@ -1,7 +1,8 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This roles adds rack mount servers to a OneView instance and puts a server profile ontop.
+with parameter "-e remove=true" it removes the serverprofile and the server from Oneview.
 
 Requirements
 ------------

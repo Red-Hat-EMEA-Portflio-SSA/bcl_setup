@@ -6,7 +6,9 @@ This role adds or deletes A and PTR records to a bind9  dns server.
 Requirements
 ------------
 
-The DNS server needs to be in the ansible inventory and given as a parameter. The role connects to that server and executes nsupdate from there. The primary zones, which ththis module can update need to have set "update-policy local" 
+The DNS server needs to be in the ansible inventory and given as a parameter. 
+The role connects to that server and executes nsupdate from there. The primary 
+zones, which this module can update need to have set "update-policy local" 
 
 Role Variables
 --------------
@@ -16,16 +18,19 @@ please see the example
 Dependencies
 ------------
 
-I only tested the  dns server 
- - to be running on RHEL 8
- - to be a bind nameserver
+I only tested 
+ - ipv4 A and PTR records
+ - the dns server to be running on RHEL 8
+ - the dns server to be a bind nameserver
  - with python3-dns installed on that nameserver
-Maybe other nameservers will work as well...
+The nsupdate key needs to be foun
+I believe any dns server allowing local 
 
 Example Playbook
 ----------------
 
-This example includes the role to add one server with forward and reverse record into a nameserver residing on host "bastion"
+This example includes the role to add one server with forward and reverse record
+into a nameserver residing on host "bastion"
 
     - name: include nsupdate
       ansible.builtin.include_role: 
