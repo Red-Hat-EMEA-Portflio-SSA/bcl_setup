@@ -1,0 +1,73 @@
+---
+- name: Build a list of all the folders
+  vmware.vmware_rest.vcenter_folder_info:
+    vcenter_hostname: "{{ vcenter_hostname }}"
+    vcenter_username: "{{ vcenter_username }}"
+    vcenter_password: "{{ vcenter_password }}"
+    vcenter_validate_certs: "{{ vcenter_validate_certs }}"
+  register: my_folders
+  delegate_to: localhost
+  when:
+    - debug | default ('false') | bool
+
+- name: print folders found
+  debug:
+    var: my_folders
+  when:
+    - debug | default ('false') | bool
+
+- name: Remove folders from datacenter
+  community.vmware.vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: "{{ vcenter_validate_certs }}"
+    datacenter_name: '{{ vcenter_datacentername }}'
+    folder_name: "{{ item.name }}"
+    folder_type: "{{ item.type }}"
+    state: absent
+  delegate_to: localhost
+  loop:
+     - name: vms
+       type: vm
+     - name: hosts
+       type: host
+     - name: networks
+       type: network
+
+##  - name: collect a list of the datacenters
+##    vmware.vmware_rest.vcenter_datacenter_info:
+##      hostname: "{{ bclvmw_host }}"
+##      username: "{{ bclvmw_username }}"
+##      password: "{{ bclvmw_password }}"
+##      validate_certs: "{{ bclvmw_validate_certs }}"
+##    register: my_datacenters
+##
+##  - name: print folders found
+##    debug:
+##      var: my_datacenters
+##    when:
+##      - debug | default ('false') | bool
+##
+##  - name: Remove our Datacenter
+##    # FIXME: Does not grab the correct datacenter...
+##    vmware.vmware_rest.vcenter_datacenter:
+##      vcenter_hostname: "{{ bclvmw_host }}"
+##      vcenter_username: "{{ bclvmw_username }}"
+##      vcenter_password: "{{ bclvmw_password }}"
+##      vcenter_validate_certs: "{{ bclvmw_validate_certs }}"
+##
+##      state: absent
+##        #datacenter:
+##      name: '{{ bclvmw_datacentername }}'
+##    delegate_to: localhost
+
+- name: Remove our Datacenter
+  community.vmware.vmware_datacenter:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: "{{ vcenter_validate_certs }}"
+    state: absent
+    datacenter_name: '{{ vcenter_datacentername }}'
+  delegate_to: localhost

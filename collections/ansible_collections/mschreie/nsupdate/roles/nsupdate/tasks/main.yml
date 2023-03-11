@@ -1,5 +1,11 @@
 ---
 # tasks file for nsupdate
+- name: debug current role path
+  debug: 
+    msg: "role_path:  {{ role_path }}"
+  when:
+    - debug | default ('false') | bool
+
 - name: get session key for nsupdate
   import_tasks: getsecret.yml
 

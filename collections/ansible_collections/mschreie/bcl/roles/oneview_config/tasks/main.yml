@@ -1,0 +1,12 @@
+---
+- name: Oneview Config
+  ansible.builtin.include_tasks:
+    file: oneview_config.yml
+  when:
+    - not remove | default ('false') | bool
+
+- name: Oneview Unconfig
+  ansible.builtin.include_tasks: 
+    file: oneview_unconfig.yml
+  when:
+    - remove | default ('false') | bool

@@ -1,0 +1,13 @@
+---
+- name: Prepare vcenter
+  ansible.builtin.include_tasks:
+    file: vcenter-prepare.yml
+  when:
+    - not remove | default ('false') | bool
+
+- name: Unprepare vcenter
+  ansible.builtin.include_tasks: 
+    file: vcenter-unprepare.yml
+  when:
+    - remove | default ('false') | bool
+

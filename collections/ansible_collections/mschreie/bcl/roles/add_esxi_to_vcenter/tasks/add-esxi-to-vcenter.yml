@@ -1,0 +1,40 @@
+---
+- name: Wait for ESXi to be ready
+  ansible.builtin.wait_for:
+    port: 902
+    host: "{{ esxi_hostname }}"
+    # all values in seconds
+    delay: 300            # wait 5 min before 1st try
+    connect_timeout: 10   # wait 10 sec with each try
+    sleep: 20             # wait 20 sec before trying agin
+    timeout: 1200         # wait 20 min alltogether before failing
+    msg: "ESXi {{ esxi_hostname }} not ready yet"
+  delegate_to: localhost
+
+- name: Wait for ESXi to be ready - twice due to reboot of ESXI
+  ansible.builtin.wait_for:
+    port: 902
+    host: "{{ esxi_hostname }}"
+    # all values in seconds
+    delay: 30             # wait 30 sec before 1st try
+    connect_timeout: 10   # wait 10 sec with each try
+    sleep: 20             # wait 20 sec before trying agin
+    timeout: 600          # wait 10 min alltogether before failing
+    msg: "ESXi {{ esxi_hostname }} not ready after second boot yet"
+  delegate_to: localhost
+
+- name: Connect the host(s)
+  community.vmware.vmware_host:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: "{{ vcenter_validate_certs }}"
+
+    esxi_hostname: "{{ esxi_hostname  }}"
+    esxi_username: "{{ esxi_username }}"
+    esxi_password: "{{ esxi_password }}"
+    fetch_ssl_thumbprint: true
+    datacenter_name: "bcl"
+    folder: "/{{ vcenter_datacentername }}/host/hosts"
+      ## folder: "host/hosts"
+  delegate_to: localhost

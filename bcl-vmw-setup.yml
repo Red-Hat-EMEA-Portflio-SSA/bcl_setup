@@ -6,6 +6,8 @@
     - ansible.controller
     - ansible.utils
     - ansible.core
+    - mschreie.bcl
+    - mschreie.nsupdate
 
   tasks:
     - name: Add OneView Host to inventory
@@ -51,11 +53,7 @@
   when:
     - not remove | default ('false') | bool
 
-- import_playbook: vmware-iso-prep.yml
-  when:
-    - not remove | default ('false') | bool
-
-- import_playbook: vmware-iso-boot.yml
+- import_playbook: esxi-install.yml
   when:
     - not remove | default ('false') | bool
 
@@ -63,12 +61,22 @@
   when:
     - not remove | default ('false') | bool
 
+- import_playbook: add-esxi-to-vcenter.yml
+  when:
+    - not remove | default ('false') | bool
+
 # remove
-- import_playbook: vcenter-unprepare.yml
+  # the "un" will be dealt with within the playbook 
+  # or within the respective roles
+- import_playbook: add-esxi-to-vcenter.yml
   when:
     - remove | default ('false') | bool
 
-- import_playbook: oneview-unconfig.yml
+- import_playbook: vcenter-prepare.yml 
+  when:
+    - remove | default ('false') | bool
+
+- import_playbook: oneview-config.yml
   when:
     - remove | default ('false') | bool
 

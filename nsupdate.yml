@@ -5,8 +5,16 @@
   collections:
     - ansible.posix 
     - community.general
+    - mschreie.nsupdate
 
   tasks:
+#    - name: debug current role path
+#      debug:
+#        msg: |
+#          roles_path: {{ roles_path }}
+#      when:
+#        - debug | default ('false') | bool
+#
     - name: include nsupdate
       ansible.builtin.include_role: 
         name: mschreie.nsupdate.nsupdate
@@ -17,4 +25,3 @@
         instruction: "{{ item.instruction }}"
         nameserver: "{{ item.nameserver }}"
       loop: "{{ bastion_named_records }}"
-
