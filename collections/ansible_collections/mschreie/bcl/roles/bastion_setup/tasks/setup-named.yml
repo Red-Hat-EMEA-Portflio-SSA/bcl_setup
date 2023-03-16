@@ -22,7 +22,7 @@
 
 - name: assure logfiles be present
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ item }}" 
     state: touch
     mode: 0660
     owner: named
@@ -31,6 +31,30 @@
   loop:
     - "/var/log/named.ddnsupdate.log"
     - "/var/log/named.auth.info"
+
+# way to slow....
+#- name: find leftover files from previous named runs
+#  find:
+#    paths: /var/named
+#    patterns: "tmp-*"
+#  register: find_results
+#
+#- name: remove leftover files found 
+#  file:
+#    path: "{{ item['path'] }}"
+#    state: absent
+#  with_items: "{{ find_results['files'] }}"
+
+- name: remove leftover tmp files found 
+  ansible.builtin.shell:
+    cmd: "rm /var/named/tmp-*"
+  ignore_errors: true
+
+
+- name: remove leftover journal files found 
+  ansible.builtin.shell:
+    cmd: "rm /var/named/*.jnl"
+  ignore_errors: true
 
 - name: provide initial zone files
   ansible.builtin.template:
@@ -49,3 +73,13 @@
     name: named
     state: restarted
     enabled: true
+      
+- name: check forward zones loaded properly
+  ansible.builtin.shell:
+    cmd: "rndc zonestatus  {{ item }}"
+  loop: "{{ bastion_named_zones }}"
+      
+- name: check reverse zones loaded properly
+  ansible.builtin.shell:
+    cmd: "rndc zonestatus  {{ item }}"
+  loop: "{{ bastion_named_revzones }}"
