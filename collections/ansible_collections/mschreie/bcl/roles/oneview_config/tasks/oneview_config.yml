@@ -1,4 +1,22 @@
 ---
+
+# IF i delegate a onview task to a different machine the EE is missing there.
+# Therefor i get the error:
+#        "HPE OneView Python SDK is required for this module."
+# not 100% sure how to fix that.
+#- name: Upload the Firmware Bundle
+#  hpe.oneview.oneview_firmware_bundle:
+#    hostname: "{{ oneview_host }}"
+#    username: "{{ oneview_username }}"
+#    password: "{{ oneview_password }}"
+#    auth_login_domain: "{{ oneview_domain }}"
+#    api_version: "{{ oneview_apiversion }}"
+#
+#    state: present
+#    file_path: "{{ firmware_path }}/{{ item }}"
+#  loop: "{{ firmware_names }}"
+#  delegate_to: bastion
+
 - name: Add a Server Hardware to Oneview
   hpe.oneview.oneview_server_hardware:
     hostname: "{{ oneview_host }}"
