@@ -18,8 +18,9 @@
     regexp: '^manage_repos'
     line: manage_repos = 1
 
-- name: install tmux
+- name: install tmux, xauth
   ansible.builtin.yum:
-    name: tmux
+    name: 
+     - tmux
+     - xorg-x11-xauth
     state: present
-
