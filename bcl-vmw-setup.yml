@@ -15,6 +15,7 @@
         name: "{{ item.name }}"
         ansible_host: "{{ item.host_ip | default (omit)  }}"
         ansible_connection: "{{ item.ansible_connection | default (omit) }}"
+        ansible_python_interpreter: "{{ item.ansible_python_interpreter | default (omit) }}"
       loop: "{{ inventory_hosts }}"
 
     - name: Add physical hosts to inventory
@@ -37,13 +38,18 @@
 
     - name: Add additional Host to inventory
       add_host:
-        name: "{{  lookup('ansible.builtin.vars', item + '_instance_name') }}"
-        ansible_host: "{{ (lookup('ansible.builtin.vars', item + '_instance_parameters')).vmware_ip_address }}"
+        name: "{{  lookup('ansible.builtin.vars', item.name + '_instance_name') }}"
+        ansible_host: "{{ (lookup('ansible.builtin.vars', item.name + '_instance_parameters')).vmware_ip_address }}"
+        group: "{{ item.group }}"
       loop: 
-        - bastion
-        - controller_ah
-        - controller
-        - vcenter
+        - name: bastion
+          group: bastion
+        - name: controller_ah
+          group: automation_hub
+        - name: controller
+          group: controller
+        - name: vcenter
+          group: vcenter
 
 - import_playbook: nsupdate.yml
   when:

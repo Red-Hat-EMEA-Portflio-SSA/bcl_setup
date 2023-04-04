@@ -1,0 +1,51 @@
+---
+- name: create project 
+  ansible.controller.project:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_passwords.admin_password }}"
+    validate_certs: no
+
+    name: "{{ project_name }}"
+    description: "{{ project_description }}"
+    organization: "{{ project_organization }}"
+    state: present
+    scm_type: "{{ project_scm_type }}"
+    scm_url: "{{ project_scm_url }}"
+    credential: "{{ project_scm_credential   | default (omit) }}"
+    default_environment: "{{ project_ee_name | default (omit) }}" 
+
+    scm_branch: "{{ project_scm_branch       | default (omit) }}"
+    scm_clean:  "{{ project_scm_clean        | default (true, true) }}"
+    scm_delete_on_update: "{{ project_scm_delete_on_update | default (false, true) }}"
+    scm_refspec: "{{ project_refspec         | default (omit) }}"
+    scm_track_submodules: "{{ project_scm_track_submodules | default (false, true) }}"
+    scm_upodate_cache_timeout: "{{ project_upodate_cache_timeout  | default (omit) }}"
+    scm_update_on_launch: "{{ project_scm_update_on_launch | default (false, true) }}"
+    update_project: "{{ project_update_project | default (false, true) }}"
+  register: project_create
+  delegate_to: localhost
+  when:
+    - not remove | default ('false') | bool
+
+- name: remove project
+  ansible.controller.project:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_passwords.admin_password }}"
+    validate_certs: no
+
+    name: "{{ project_name }}"
+    state: absent
+  register: project_create
+  delegate_to: localhost
+  when:
+    - remove | default ('false') | bool
+
+
+- name: Debug project create / project remove
+  debug:
+     msg:  |
+      {{ project_create }}
+  when:
+    - debug | default ('false') | bool

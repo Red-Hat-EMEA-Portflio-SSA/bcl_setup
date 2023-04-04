@@ -3,5 +3,14 @@
   become: true
   hosts:
     - automation_hub
-  roles:
-    - ansible_ssa.general.automationhub_content
+  tasks:
+    - name: Deploy automation hub content for rhaap
+      ansible.builtin.include_role:
+        name: ansible_ssa.general.automationhub_content
+
+    - name: Deploy BCL specific automation hub content 
+      ansible.builtin.include_role:
+        name: ansible_ssa.general.automationhub_content
+      vars:
+        ansible_ssa_ee_image:  "{{ ah_ee_image_source }}"
+        ah_ee_image:           "{{  ah_ee_image_dest }}"
