@@ -1,3 +1,0 @@
----
-# defaults file for esxi_iso_prep
-ks_template: ks.cfg.j2
