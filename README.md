@@ -2,6 +2,16 @@
 # you need VPN connection to CIC
 # you need credentials to log int to CIC VCenter
 
+# Needs to self created collections:
+# if not solverd otherwise you need to put:
+https://github.com/mschreie/collection_mschreie_nsupdate
+into:  collections/ansible_collections/mschreie/nsupdate
+
+and:
+https://github.com/mschreie/collection_mschreie_bcl
+into   collections/ansible_collections/mschreie/bcl
+
+
 ##Needs to run form someone with SSH key to connect to the RHEL template used later...
 ## HandsOnLab@Deployment
 ## ansible@bastion21
