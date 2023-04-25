@@ -1,5 +1,4 @@
-collections/ansible_collections/mschreie/bcl
-collections/ansible_collections/mschreie/nsupdate
+collections/ansible_collections/
 VMware-VMvisor-Installer-*.iso
 ansible-automation-platform-setup*tar.gz
 ansible-automation-platform-setup*tgz
