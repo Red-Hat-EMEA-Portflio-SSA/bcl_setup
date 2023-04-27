@@ -15,26 +15,26 @@
         search_domain: "{{ bastion_named_domain }}"
         nameservers: "{{ [ bastion_named_serverip ] }}"
 
-- hosts: vcenter
-  gather_facts: false
-
-  collections:
-    - ansible.posix 
-    - community.general
-    - mschreie.resolver
-    - community.vmware
-
-  tasks:
-    - name: include resolver update
-      ansible.builtin.include_role: 
-        name: mschreie.resolver.vcenter_resolvconf
-      vars:
-        vcenter_hostname: "{{ bclvmw_host }}"
-        vcenter_username: "{{ bclvmw_username }}"
-        vcenter_password: "{{ bclvmw_password }}"
-        vcenter_validate_certs: "{{ bclvmw_validate_certs }}"
-        vcenter_datacentername: '{{ bclvmw_datacentername }}'
-
-        search_domain: "{{ bastion_named_domain }}"
-        nameservers: "{{ [ bastion_named_serverip ] }}"
-        vcenter_cluster_name: "{{ bclvmw_clustername }}"
+##- hosts: vcenter
+##  gather_facts: false
+##
+##  collections:
+##    - ansible.posix 
+##    - community.general
+##    - mschreie.resolver
+##    - community.vmware
+##
+##  tasks:
+##    - name: include resolver update
+##      ansible.builtin.include_role: 
+##        name: mschreie.resolver.vcenter_resolvconf
+##      vars:
+##        vcenter_hostname: "{{ bclvmw_host }}"
+##        vcenter_username: "{{ bclvmw_username }}"
+##        vcenter_password: "{{ bclvmw_password }}"
+##        vcenter_validate_certs: "{{ bclvmw_validate_certs }}"
+##        vcenter_datacentername: '{{ bclvmw_datacentername }}'
+##
+##        search_domain: "{{ bastion_named_domain }}"
+##        nameservers: "{{ [ bastion_named_serverip ] }}"
+##        vcenter_cluster_name: "{{ bclvmw_clustername }}"

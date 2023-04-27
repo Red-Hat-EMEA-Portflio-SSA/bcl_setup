@@ -1,7 +1,6 @@
 ---
 - import_playbook: inventory_prep.yml
 
-
 - import_playbook: bastion-instance.yml
   when:
     - bastion_enable | default ('false') | bool
@@ -10,8 +9,20 @@
     - not remove | default ('false') | bool
     - bastion_enable | default ('false') | bool
  
+- import_playbook: nsupdate.yml
+  when:
+#    - bastion_enable | default ('false') | bool
+    - not remove | default ('false') | bool
+
 # run automation hub setup early, since it takes care of some requirements
 - import_playbook: controller-instance.yml
+
+- import_playbook: resolverupdate.yml
+  when:
+#    - bastion_enable | default ('false') | bool
+    - not remove | default ('false') | bool
+
+#
 # run automation hub setup early, since it takes care of some requirements
 - import_playbook: automationhub-setup.yml
   when:
@@ -20,6 +31,7 @@
 - import_playbook: controller-setup.yml
   when: not remove | default ('false') | bool
 # if automation hub is enabled it has to go before controller-content so controller can fetch its content from it
+
 - import_playbook: automationhub-content.yml
   when:
     - not remove | default ('false') | bool
@@ -28,12 +40,3 @@
 - import_playbook: controller-content.yml
   when: not remove | default ('false') | bool
 
-- import_playbook: nsupdate.yml
-  when:
-#    - bastion_enable | default ('false') | bool
-    - not remove | default ('false') | bool
-
-- import_playbook: resolverupdate.yml
-  when:
-#    - bastion_enable | default ('false') | bool
-    - not remove | default ('false') | bool
