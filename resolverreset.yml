@@ -1,0 +1,23 @@
+---
+- import_playbook: inventory_prep.yml
+# when environment is set up from scratch DNS might not be available, at some points in time.
+# Maybe servers are there alredy by previous deployment efforts.
+# Then you need to reset resolver to other nameservers so that general dns resolving works 
+# e.g. for Red Hat CDN.
+
+- hosts: rhel
+  gather_facts: false
+
+  collections:
+    - ansible.posix 
+    - community.general
+    - mschreie.resolver
+
+  tasks:
+    - name: include resolver update
+      ansible.builtin.include_role: 
+        name: mschreie.resolver.resolvconf
+      vars:
+        search_domain: "{{ bastion_named_domain }}"
+        nameservers: "{{ [ '10.11.0.13' ] }}"
+

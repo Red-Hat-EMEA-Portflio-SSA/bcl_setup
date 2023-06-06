@@ -52,7 +52,6 @@ echo "set environment by calling:"
 echo ". ./bcl_setup_config/env.sh"
 
 
-cat << EOF
 Usage: 
 
 # Setting up AAP (including bastion host)
@@ -67,4 +66,6 @@ still missing
 For all 3 plays you can add:
 -e remove=true		removes the artifacts created
 -e debug=true		enbles debugging output (not consistently implemented yet)
-EOF
+
+
+I've added some test-.. plays to the repo. Most likely they are not needed anymore, but their existance does not harm either.

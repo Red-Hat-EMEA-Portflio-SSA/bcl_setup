@@ -1,0 +1,21 @@
+---
+- import_playbook: inventory_prep.yml
+
+###
+### run automation hub setup early, since it takes care of some requirements
+##- import_playbook: automationhub-setup.yml
+##  when:
+##    - not remove | default ('false') | bool
+##    - controller_ah_enable | default ('false') | bool
+##- import_playbook: controller-setup.yml
+##  when: not remove | default ('false') | bool
+### if automation hub is enabled it has to go before controller-content so controller can fetch its content from it
+##
+- import_playbook: automationhub-content.yml
+  when:
+    - not remove | default ('false') | bool
+    - controller_ah_enable | default ('false') | bool
+
+- import_playbook: controller-content.yml
+  when: not remove | default ('false') | bool
+

@@ -1,0 +1,60 @@
+---
+- name: Create temporary inventory for ansible-navigator 
+  hosts: localhost
+  gather_facts: false
+
+  collections:
+    - ansible.controller
+    - ansible.utils
+    - ansible.core
+    - mschreie.bcl
+    - mschreie.nsupdate
+
+  tasks:
+    - name: Add OneView Host to inventory
+      add_host:
+        name: "{{ item.name }}"
+        ansible_host: "{{ item.host_ip | default (omit)  }}"
+        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
+        ansible_python_interpreter: "{{ item.ansible_python_interpreter | default (omit) }}"
+      loop: "{{ inventory_hosts }}"
+
+    - name: Add physical hosts to inventory
+      add_host:
+        name: "{{ item.name }}"
+        ansible_host: "{{ item.host_ip | default (omit)  }}"
+        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
+        ilo_ip: "{{ item.ilo_ip | default (omit) }}"
+        host_bootproto: "{{ item.host_bootproto | default (omit) }}"
+        host_ip: "{{ item.host_ip | default (omit) }}"
+        host_nic: "{{ item.host_nic | default (omit) }}"
+        host_vlan: "{{ item.host_vlan | default (omit) }}"
+        host_mask: "{{ item.host_mask | default (omit) }}"
+        host_gw: "{{ item.host_gw | default (omit) }}"
+        host_nameserver: "{{ item.host_nameserver | default (omit) }}"
+        groups: 
+          - "esx_hosts"
+          - "oneview_targets"
+      loop: "{{ oneview_machines }}"
+
+    - name: Add additional Host to inventory
+      add_host:
+        name: "{{  lookup('ansible.builtin.vars', item.name + '_instance_name') }}"
+        ansible_host: "{{ (lookup('ansible.builtin.vars', item.name + '_instance_parameters')).vmware_ip_address }}"
+        groups: "{{ item.groups }}"
+      loop: 
+        - name: bastion
+          groups: 
+            - "bastion"
+            - "rhel"
+        - name: controller_ah
+          groups: 
+            - "automation_hub"
+            - "rhel"
+        - name: controller
+          groups: 
+            - "controller"
+            - "rhel"
+        - name: vcenter
+          groups: 
+            - "vcenter"
