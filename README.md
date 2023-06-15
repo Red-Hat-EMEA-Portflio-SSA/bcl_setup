@@ -1,4 +1,4 @@
-# REpo to set up BCL Lab environment in CIC
+# Repo to set up BCL Lab environment in CIC
 # you need VPN connection to CIC
 # you need credentials to log int to CIC VCenter
 
@@ -38,6 +38,12 @@ into   collections/ansible_collections/portfoliossa/bcl
 #    vapi-runtime              2.37.0    vAPI Runtime
 # works best when not collections_path in ansible.cfg is not set
 #       ##collections_paths = ./collections
+
+
+Before starting download ansible-automation-platform-setup-2.3-2.tar.gz 
+and ensure the that within bcl_setup_config/extra_vars.yml
+controller_version: "2.3-2"
+is set correctly and accordingly.
 
 echo "start the ssh-agent like this:"
 echo "eval `ssh-agent`
