@@ -5,12 +5,12 @@
   collections:
     - ansible.posix 
     - community.general
-    - mschreie.resolver
+    - portfoliossa.resolver
 
   tasks:
     - name: include resolver update
       ansible.builtin.include_role: 
-        name: mschreie.resolver.resolvconf
+        name: portfoliossa.resolver.resolvconf
       vars:
         search_domain: "{{ bastion_named_domain }}"
         nameservers: "{{ [ bastion_named_serverip ] }}"
@@ -21,13 +21,13 @@
 ##  collections:
 ##    - ansible.posix 
 ##    - community.general
-##    - mschreie.resolver
+##    - portfoliossa.resolver
 ##    - community.vmware
 ##
 ##  tasks:
 ##    - name: include resolver update
 ##      ansible.builtin.include_role: 
-##        name: mschreie.resolver.vcenter_resolvconf
+##        name: portfoliossa.resolver.vcenter_resolvconf
 ##      vars:
 ##        vcenter_hostname: "{{ bclvmw_host }}"
 ##        vcenter_username: "{{ bclvmw_username }}"

@@ -11,5 +11,5 @@
     # this needs to run one at a time => serial: 1 
     - name: sysprep esxi iso for hands free installation
       ansible.builtin.include_role:
-        name: mschreie.bcl.vmware-iso-prep
+        name: portfoliossa.bcl.vmware-iso-prep
       when: bclvmw_enable | default ('false') | bool

@@ -7,8 +7,8 @@
     - ansible.controller
     - ansible.utils
     - ansible.core
-    - mschreie.bcl
-    - mschreie.nsupdate
+    - portfoliossa.bcl
+    - portfoliossa.nsupdate
 
   tasks:
     - name: Add OneView Host to inventory

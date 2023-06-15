@@ -10,5 +10,5 @@ collections:
   - name: freeipa.ansible_freeipa
   - name: community.vmware
     #  - name: vmware.vmware_rest
-  - name: mschreie.bcl
+  - name: portfoliossa.bcl
 

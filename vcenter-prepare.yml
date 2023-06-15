@@ -9,7 +9,7 @@
   tasks:
     - name: prepare and configure vcenter
       ansible.builtin.include_role:
-        name: mschreie.bcl.vcenter_prepare
+        name: portfoliossa.bcl.vcenter_prepare
       vars:
         vcenter_hostname: "{{ bclvmw_host }}"
         vcenter_username: "{{ bclvmw_username }}"

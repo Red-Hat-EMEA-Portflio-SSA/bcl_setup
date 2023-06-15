@@ -4,4 +4,4 @@
   hosts:
     - bastion
   roles:
-    - mschreie.bcl.bastion_setup
+    - portfoliossa.bcl.bastion_setup

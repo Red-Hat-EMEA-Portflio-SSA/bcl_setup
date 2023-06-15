@@ -11,12 +11,12 @@
   collections:
     - ansible.posix 
     - community.general
-    - mschreie.resolver
+    - portfoliossa.resolver
 
   tasks:
     - name: include resolver update
       ansible.builtin.include_role: 
-        name: mschreie.resolver.resolvconf
+        name: portfoliossa.resolver.resolvconf
       vars:
         search_domain: "{{ bastion_named_domain }}"
         nameservers: "{{ [ '10.11.0.13' ] }}"

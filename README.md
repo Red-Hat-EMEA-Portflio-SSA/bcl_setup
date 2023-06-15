@@ -2,14 +2,17 @@
 # you need VPN connection to CIC
 # you need credentials to log int to CIC VCenter
 
-# Needs to self created collections:
-# if not solverd otherwise you need to put:
-https://github.com/mschreie/collection_mschreie_nsupdate
-into:  collections/ansible_collections/mschreie/nsupdate
+# Needs two or three self created collections:
+# if not solved otherwise you need to put:
+git@github.com:Red-Hat-EMEA-Portflio-SSA/collection_portfoliossa_nsupdate.git
+into:  collections/ansible_collections/portfoliossa/nsupdate
+
+git@github.com:Red-Hat-EMEA-Portflio-SSA/collection_portfoliossa_resolver.git
+into:  collections/ansible_collections/portfoliossa/resolver
 
 and:
-https://github.com/mschreie/collection_mschreie_bcl
-into   collections/ansible_collections/mschreie/bcl
+git@github.com:Red-Hat-EMEA-Portflio-SSA/collection_portfoliossa_bcl.git
+into   collections/ansible_collections/portfoliossa/bcl
 
 
 ##Needs to run form someone with SSH key to connect to the RHEL template used later...

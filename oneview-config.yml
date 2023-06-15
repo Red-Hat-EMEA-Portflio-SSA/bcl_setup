@@ -7,5 +7,5 @@
   tasks:
     - name: configure physical hosts via oneview
       ansible.builtin.include_role:
-        name: mschreie.bcl.oneview_config
+        name: portfoliossa.bcl.oneview_config
       when: oneview_enable | default ('false') | bool

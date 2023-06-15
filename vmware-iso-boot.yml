@@ -10,5 +10,5 @@
   tasks:
   - name: install esxi on bare metal nodes
     ansible.builtin.include_role:
-      name: mschreie.bcl.vmware-iso-boot
+      name: portfoliossa.bcl.vmware-iso-boot
     when: bclvmw_enable | default ('false') | bool

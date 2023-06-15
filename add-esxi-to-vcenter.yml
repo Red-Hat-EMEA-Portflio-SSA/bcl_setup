@@ -3,12 +3,12 @@
   gather_facts: false
 
   collections:
-    - mschreie.bcl
+    - portfoliossa.bcl
 
   tasks:
     - name: add esxi hosts to vcenter
       ansible.builtin.include_role:
-        name: mschreie.bcl.add_esxi_to_vcenter
+        name: portfoliossa.bcl.add_esxi_to_vcenter
       vars:
         vcenter_hostname: "{{ bclvmw_host }}"
         vcenter_username: "{{ bclvmw_username }}"

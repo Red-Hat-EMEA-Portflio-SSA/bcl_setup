@@ -8,8 +8,8 @@
     - ansible.controller
     - ansible.utils
     - ansible.core
-    - mschreie.bcl
-    - mschreie.nsupdate
+    - portfoliossa.bcl
+    - portfoliossa.nsupdate
 
   tasks:
 #- import_playbook: automationhub-content.yml
