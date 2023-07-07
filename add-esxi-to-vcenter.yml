@@ -1,12 +1,10 @@
 ---
-- hosts: esx_hosts
+- name: Add esxi hosts to vcenter
+  hosts: esx_hosts
   gather_facts: false
 
-  collections:
-    - portfoliossa.bcl
-
   tasks:
-    - name: add esxi hosts to vcenter
+    - name: Add esxi hosts to vcenter
       ansible.builtin.include_role:
         name: portfoliossa.bcl.add_esxi_to_vcenter
       vars:
@@ -14,9 +12,10 @@
         vcenter_username: "{{ bclvmw_username }}"
         vcenter_password: "{{ bclvmw_password }}"
         vcenter_validate_certs: "{{ bclvmw_validate_certs }}"
-        vcenter_datacentername: '{{ bclvmw_datacentername }}'
-        esxi_hostname: "{{ host_ip  }}"
+        vcenter_datacentername: "{{ bclvmw_datacentername }}"
+        vcenter_clustername: "{{ bclvmw_clustername }}"
+        esxi_hostname: "{{ host_ip }}"
         esxi_username: "root"
         esxi_password: "{{ esxi_rootpw }}"
-      when: bclvmw_enable | default ('false') | bool
+      when: bclvmw_enable | default('false') | bool
 

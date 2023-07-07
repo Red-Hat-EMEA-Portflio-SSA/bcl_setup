@@ -1,28 +1,22 @@
 ---
-- hosts: esx_hosts
+- name: Customise esxi iso
+  hosts: esx_hosts
   gather_facts: false
   serial: 1
 
-  collections:
-    - hpe.oneview
-    - ansible.posix 
-
   tasks:
-    # this needs to run one at a time => serial: 1 
-    - name: sysprep esxi iso for hands free installation
+    # this needs to run one at a time => serial: 1
+    - name: Sysprep esxi iso for hands free installation
       ansible.builtin.include_role:
         name: portfoliossa.bcl.esxi_iso_prep
-      when: bclvmw_enable | default ('false') | bool
+      when: bclvmw_enable | default('false') | bool
 
-- hosts: esx_hosts
+- name: Install esxi server by booting from iso
+  hosts: esx_hosts
   gather_facts: false
 
-  collections:
-    - hpe.oneview
-    - ansible.posix 
-
   tasks:
-  - name: install esxi on bare metal nodes
-    ansible.builtin.include_role:
-      name: portfoliossa.bcl.esxi_iso_boot
-    when: bclvmw_enable | default ('false') | bool
+    - name: Install esxi on bare metal nodes
+      ansible.builtin.include_role:
+        name: portfoliossa.bcl.esxi_iso_boot
+      when: bclvmw_enable | default('false') | bool
