@@ -1,13 +1,10 @@
 ---
-- hosts: vcenter
+- name: Vcenter prepare
+  hosts: vcenter
   gather_facts: false
 
-  collections:
-    - vmware.vmware_rest
-    - community.vmware
-
   tasks:
-    - name: prepare and configure vcenter
+    - name: Prepare and configure vcenter
       ansible.builtin.include_role:
         name: portfoliossa.bcl.vcenter_prepare
       vars:
@@ -15,6 +12,9 @@
         vcenter_username: "{{ bclvmw_username }}"
         vcenter_password: "{{ bclvmw_password }}"
         vcenter_validate_certs: "{{ bclvmw_validate_certs }}"
-        vcenter_datacentername: '{{ bclvmw_datacentername }}'
-
-      when: bclvmw_enable | default ('false') | bool
+        vcenter_datacentername: "{{ bclvmw_datacentername }}"
+        vcenter_clustername: "{{ bclvmw_clustername }}"
+        vcenter_vswitchname: "{{ bclvmw_vswitchname }}"
+        vcenter_portgroupname: "{{ bclvmw_portgroupname }}"
+        vcenter_vlanid: "{{ bclvmw_vlanid }}"
+      when: bclvmw_enable | default('false') | bool
