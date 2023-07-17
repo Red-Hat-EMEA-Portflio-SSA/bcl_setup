@@ -1,0 +1,398 @@
+---
+# HINT
+# in this setup are 2 Vcenter / vmware environments
+# a)
+#     the general purpose Vcenter, where all our labs are hosted
+#     you find AAP Controler, Automation Hub, Bastion Host, OneView and VCenter-VM reside there
+# b)
+#     the BCL VCenter, which we want to set up.
+# all parameters vmware_ refere to a)
+# all parameters bclvmw_ refer to b) 
+
+oneview_host: "{{ vault_oneview_host }}"
+oneview_username: "{{ vault_oneview_username }}"
+oneview_password: "{{ vault_oneview_password }}"
+oneview_domain: "{{ vault_oneview_domain }}"
+oneview_apiversion: "{{ vault_oneview_apiversion }}"
+
+ilo_username: "{{ vault_ilo_username }}"
+ilo_password: "{{ vault_ilo_password }}"
+
+inventory_hosts:
+  - name: localhost
+    # see: https://docs.ansible.com/ansible/latest/inventory/implicit_localhost.html
+    ansible_connection: local
+    ansible_python_interpreter: "{{ansible_playbook_python}}"
+  - name: bastion_host 
+    host_ip: "10.6.55.4"
+  - name: oneview_host 
+    host_ip: oneview.bcl.redhat.hpecic.com
+
+oneview_machines: 
+  - name: rh-bctl-1-gen9
+    ilo_ip:  "10.6.55.201"
+    host_ip: "10.6.54.201"
+    host_nic: vmnic4
+      # host_vlan
+    host_bootproto: 'static'
+    host_mask: "255.255.255.0"
+    host_gw: "10.6.54.1"
+    host_nameserver: "{{ bastion_named_serverip }}"
+  - name: rh-bctl-2-gen9
+    ilo_ip:  "10.6.55.202"
+    host_ip: "10.6.54.202"   
+    host_nic: vmnic4
+    host_bootproto: 'static'
+    host_mask: "255.255.255.0"
+    host_gw: "10.6.54.1"
+    host_nameserver: "{{ bastion_named_serverip }}"
+  - name: rh-bctl-3-gen9
+    ilo_ip:  "10.6.55.203"
+    host_ip: "10.6.54.203"
+    host_nic: vmnic4
+    host_bootproto: 'static'
+    host_mask: "255.255.255.0"
+    host_gw: "10.6.54.1"
+    host_nameserver: "{{ bastion_named_serverip }}"
+  - name: rh-bctl-4-gen9
+    ilo_ip:  "10.6.55.204"
+    host_ip: "10.6.54.204"
+    host_nic: vmnic4
+    host_bootproto: 'static'
+    host_mask: "255.255.255.0"
+    host_gw: "10.6.54.1"
+    host_nameserver: "{{ bastion_named_serverip }}"
+
+# Oneview configuration
+ov_template: BCL
+server_profile_template_name: "{{ ov_template }}"
+server_hardware_type_name: "DL380 Gen9"
+manage_mp: false 
+manage_bios: false 
+  
+# VMware Install related vars
+###cust_iso_file: custom_esxi.iso
+local_vmware_isoimage: "./VMware-VMvisor-Installer-7.0U2a-17867351.x86_64.iso"
+bastion_get_url: "http://{{ hostvars.bastion_host.ansible_host }}/isos"
+bastion_iso_dir: /var/www/html/isos
+bastion_firmware_dir: /var/www/html/firmware
+  ## esxi_installiso: "{{ bastion_get_url }}/{{ cust_iso_file }}"
+
+# OneView Server profile Template creation
+  #enclosure_group_name: "Demo1_Rack12_EG"
+## server_profile_name: "RHEl76"
+#deployment_network_name: "Redhat_workload"
+## fc_network_1: "FC01"
+## fc_network_2: "FC02"
+## os_deployment_plan_name: "RHEL"
+## storage_pool_name: "SSD_r5"
+## volume_template_name: "SVT-1"
+## firmware_baseline_name: "HPE Synergy Custom SPP 2018110 2019 02 15"
+
+# adjustable VMware installation related vars:
+org_iso:  "{{ bastion_iso_dir }}/VMware-VMvisor-Installer-7.0U2a-17867351.x86_64.iso"
+cust_iso: "{{ bastion_iso_dir }}/{{ cust_iso_file }}"
+esxi_rootpw: "{{ vault_esxi_rootpw }}"
+
+# fixed WMware installation related vars:
+mnt_dir:  /esxi_cdrom_mount
+wrk_dir:  /esxi_cdrom
+# ks_template: ks.cfg.j2 # defined as default in the role 
+ks_dest: "{{ wrk_dir }}/ks.cfg"
+bootoption: "runweasel ks=cdrom:/KS.CFG"
+bootcfg_dest: "{{ wrk_dir }}/efi/boot/boot.cfg"
+bootcfg_dest2: "{{ wrk_dir }}/boot.cfg"
+# #################
+# all variables prefixed with "vault_" should not be declared here, but in a ansible vault encrypted file
+# more details on Ansible Vault: https://docs.ansible.com/ansible/latest/cli/ansible-vault.html
+#
+# Bastion host instance name
+# MANDATORY
+bastion_instance_name: bastion
+# Parameters on how to set up this instance e.g vm parameters)
+bastion_instance_parameters:
+  vmware_network_type: 'static'
+  vmware_ip_address: '10.6.55.4'
+  vmware_netmask: '255.255.255.0'
+  vmware_gateway: '10.6.55.1'
+    #vmware_dns_server1: '10.11.2.44'
+  vmware_dns_server1: '10.11.0.13'
+  # vmware_dns_server2:
+  vmware_network: "DPortGroup_NW1055_HIT_rh_bcl_core"
+  vmware_instance_diskgb: '35'
+  vmware_instance_memmb: '8192'
+  vmware_instance_cpus: '2'
+
+bastion_enable: true
+bastion_named_enable: true
+bastion_dhcpd_enable: true 
+bastion_httpd_enable: true 
+bastion_nfsd_enable: true 
+
+bastion_ansible_password: "{{ vault_bastion_ansible_password }}"
+bastion_named_serverip: "{{ bastion_instance_parameters.vmware_ip_address }}"
+bastion_named_domain: "bcl.redhat.hpecic.com"
+bastion_named_fqservername: "{{ bastion_instance_name }}.{{ bastion_named_domain }}"
+bastion_named_forwarders: 
+  - "10.11.0.13"
+
+bastion_dhcpd_subnets:
+  - name: '10.6.55.0'
+    mask: '255.255.255.0'
+    router: '10.6.55.1'
+
+  - name: '10.6.54.0'
+    mask: '255.255.255.0'
+    range_start: '10.6.54.150'
+    range_stop:  '10.6.54.199'
+    router: '10.6.54.1'
+
+  - name: '10.6.53.0'
+    mask: '255.255.255.0'
+    range_start: '10.6.53.150'
+    range_stop:  '10.6.53.199'
+    router: '10.6.53.1'
+
+bastion_named_zones:
+  - bcl.redhat.hpecic.com
+bastion_named_revzones:
+  - 55.6.10.in-addr.arpa
+  - 54.6.10.in-addr.arpa
+  - 53.6.10.in-addr.arpa
+
+bastion_named_records:
+  - record: "aap-controller.bcl.redhat.hpecic.com."  # fully correct key (most likely with . at the end)
+    value: "10.6.55.2"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "aap-privhub.bcl.redhat.hpecic.com."  # fully correct key (most likely with . at the end)
+    value: "10.6.55.3"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "bastion.bcl.redhat.hpecic.com."  # fully correct key (most likely with . at the end)
+    value: "10.6.55.4"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "vcenter.bcl.redhat.hpecic.com."  # fully correct key (most likely with . at the end)
+    value: "10.6.55.10"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "oneview.bcl.redhat.hpecic.com."  # fully correct key (most likely with . at the end)
+    value: "10.6.55.9"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "rh-bctl-1-gen9-ilo.bcl.redhat.hpecic.com."
+    value:  "10.6.55.201"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "rh-bctl-1-gen9.bcl.redhat.hpecic.com."
+    value: "10.6.54.201"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "rh-bctl-2-gen9-ilo.bcl.redhat.hpecic.com."
+    value:  "10.6.55.202"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "rh-bctl-2-gen9.bcl.redhat.hpecic.com."
+    value: "10.6.54.202"   
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "rh-bctl-3-gen9-ilo.bcl.redhat.hpecic.com."
+    value:  "10.6.55.203"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "rh-bctl-3-gen9.bcl.redhat.hpecic.com."
+    value: "10.6.54.203"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "rh-bctl-4-gen9-ilo.bcl.redhat.hpecic.com."
+    value:  "10.6.55.204"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+  - record: "rh-bctl-4-gen9.bcl.redhat.hpecic.com."
+    value: "10.6.54.204"
+    rrtype: "both"
+    instruction: "add"     # values: add, remove
+    nameserver: "bastion"  # needs to be in our inventory
+
+# needs to be on bastion host:
+firmware_path: "/var/www/html/firmware/"
+firmware_names:
+  - "P52574_001_spp-Gen9.1-Gen9SPPGen91.2022_0822.4.iso"
+
+
+# Automation controller instance name
+# MANDATORY
+controller_instance_name: aap-controller
+#controller_fqdn: "{{ controller_instance_name }}.{{ dns_suffix }}.ansible-labs.de"
+controller_fqdn: "{{ controller_instance_name }}.bcl.redhat.hpecic.com"
+
+# Parameters on how to set up this instance e.g vm parameters)
+controller_instance_parameters:
+  vmware_network_type: 'static'
+  vmware_ip_address: '10.6.55.2'
+  vmware_netmask: '255.255.255.0'
+  vmware_gateway: '10.6.55.1'
+    #vmware_dns_server1: '10.11.2.44'
+  vmware_dns_server1: '10.11.0.13'
+  # vmware_dns_server2:
+  vmware_network: "DPortGroup_NW1055_HIT_rh_bcl_core"
+
+  vmware_instance_diskgb: '16'
+  vmware_instance_memmb: '8192'
+  vmware_instance_cpus: '2'
+
+# Hint: The ansible_ssa role defaults to 2.3-1 but i only found download for
+##controller_version: 2.2.1-1
+controller_version: "2.3-2"
+
+# enable private automation hub
+# default is false in which case only controller is deployed and no private automation hub
+controller_ah_enable: true
+# name of the private automation hub instance
+# MANDATOR if controller_ah_enable is true
+controller_ah_instance_name: aap-privhub
+#controller_ah_fqdn: "{{ controller_ah_instance_name }}.{{ dns_suffix }}.ansible-labs.de"
+controller_ah_fqdn: "{{ controller_ah_instance_name }}.bcl.redhat.hpecic.com"
+
+
+# Parameters on how to set up this instance e.g vm parameters)
+controller_ah_instance_parameters:
+  vmware_network_type: 'static'
+  vmware_ip_address: '10.6.55.3'
+  vmware_netmask: '255.255.255.0'
+  vmware_gateway: '10.6.55.1'
+    #vmware_dns_server1: '10.11.2.44'
+  vmware_dns_server1: '10.11.0.13'
+  # vmware_dns_server2:
+  vmware_network: "DPortGroup_NW1055_HIT_rh_bcl_core"
+
+  vmware_instance_diskgb: '16'
+  vmware_instance_memmb: '8192'
+  vmware_instance_cpus: '2'
+
+ah_ee_image_source: "docker://quay.io/mschreie/bcl-ov"
+ah_ee_image_dest:   "docker://{{ controller_ah_fqdn }}/bcl-ov:latest"
+
+# VCenter instance name
+# Just to get it added into the inventory
+vcenter_instance_name: "vcenter"
+vcenter_instance_parameters:
+  vmware_ip_address: '10.6.55.10'
+
+bclvmw_host: "{{ vault_bclvmw_host }}"
+bclvmw_username: "{{ vault_bclvmw_username }}"
+bclvmw_password: "{{ vault_bclvmw_password }}"
+bclvmw_validate_certs: false
+bclvmw_datacentername: "bcl"
+bclvmw_clustername: "bcl-cluster"
+bclvmw_vswitchname: "bcl-vswitch"
+bclvmw_portgroupname: "bcl-wrklds"
+bclvmw_vlanid: 1053
+
+bclvmw_enable: true
+oneview_enable: true
+
+# this is the password of the admin user for logging into automation controller
+# MANDATORY - store the actual password in a vault file!
+controller_admin_password: "{{ vault_controller_admin_password }}"
+# the password used by Postgres
+# MANDATORY - store the actual password in a vault file!
+controller_pg_password: "{{ vault_controller_pg_password }}"
+# the password to decrypt and open vault safes
+# MANDATORY - store the actual password in a vault file!
+controller_vault_password: "{{ vault_controller_vault_password }}"
+# all Jobs will use the account "ansible" to log into the target machine.
+# therefore automation controller needs to store the private key for this user
+# note the key has to be provided in one line!
+# MANDATORY - store the actual password in a vault file!
+controller_ansible_private_key: "{{ vault_controller_ansible_private_key }}"
+# set an individual Sync URL instead of the following default, which will sync everything
+# replace the provided default with your individual sync list from https://console.redhat.com/ansible/automation-hub/token
+# MANDATORY
+automation_hub_server_url: "https://console.redhat.com/api/automation-hub/content/published/"
+# Offline access token for Automation Hub on console.redhat.com
+# MANDATORY if controller_ah_enable is true
+rhsm_ah_offline_token: "{{ vault_rhsm_ah_offline_token }}"
+# RHSM user name to register system to subscription manager
+# MANDATORY
+rhsm_username: mschreie
+# RHSM password to register system to subscription manager
+# MANDATORY - store the actual password in a vault file!
+rhsm_password: "{{ vault_rhsm_password }}"
+# RHSM Pool ID to subscribe the system to, must have an active Red Hat Ansible Automation Platform entitlement
+# MANDATORY- store the actual password in a vault file!
+rhsm_poolid: "{{ vault_rhsm_poolid }}"
+
+dns_update: true
+# enter the sub domain you got assigned, just the sub domain without the .ansible-labs.de part
+dns_suffix: bcl-hpe
+# you should have received a key pair which you keep in a secure place, content of both files here
+# you will have to make the private key a single line by using \n instead of the line breaks
+dns_key: "{{ vault_dns_key }}"
+dns_private: "{{ vault_dns_key_private }}"
+
+# No Lets-encrypt (true should be defaut but isn't)
+letsencrypt_skip: true
+
+
+# to download ee to automation hub
+quay_registry_password: "{{ vault_quay_registry_password }}"
+quay_registry_username: mschreie
+# issue with TASK 'retrieve private automation hub token via API call'
+letsencrypt_staging: true
+
+use_case_satellite: false
+use_case_windows: false
+use_case_workflow: false
+use_case_idm: false
+use_case_tomcat: false
+
+type: vmware
+controller_enable_provider_vmware: true
+
+### NOT NEEDED as they are in the ENV-vars! ??
+# user provided credentials to log into VMware
+#vmware_host: "{{ vault_vmware_host }}"
+#vmware_username: "{{ vault_vmware_username }}"
+#vmware_password: "{{ vault_vmware_password }}"
+vcenter_validate_certs: false
+# the cluster, datacenter, etc. in which the VMs will be created
+# MANDATORY
+#vmware_template: "RHEL 8 Template WIP"
+vmware_template: "RHEL 9.2 Template"
+vmware_datacenter: "HIT_RedHat"
+vmware_datastore: "VV.HIT-RedHat"
+vmware_folder: "HIT_RedHat/vm/BCL"
+vmware_cluster: "HIT_RedHat"
+vmware_domain_name: "bcl.redhat.hpecic.com"
+vmware_ansible_user: "root"
+
+# the base64 encoded manifest
+# download the manifest from access.redhat.com and convert it to a base64 encoded string
+# base64 < /path/to/manifest.zip
+rhaap_manifest: "{{ vault_rhaap_manifest }}"

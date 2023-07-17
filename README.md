@@ -3,7 +3,7 @@
 # you need credentials to log int to CIC VCenter
 
 # Needs two or three self created collections:
-# if not solved otherwise you need to put:
+# if not solved via execution environment you need to put:
 git@github.com:Red-Hat-EMEA-Portflio-SSA/collection_portfoliossa_nsupdate.git
 into:  collections/ansible_collections/portfoliossa/nsupdate
 
@@ -21,12 +21,11 @@ into   collections/ansible_collections/portfoliossa/bcl
 ## mschreie@mschreie
 ## mschreie@rhel9msi.example.com
 
-# I'm working with execution environments, whihc are needed for the different
-# moduels. I do not have one EE which just works for everything due to 
-# dependencies.
-# bcl-ov:1
-#   base:
-#      quay.io/redhat_emp1/ee-ansible-ssa:2.0.0.1 
+# I'm working with an execution environment, which has included all pyhton modules and the needed 
+# content collections (including the three above).
+# bcl-ov:8 is the current ee used.
+#   the definition is based on the definition of:
+#      quay.io/redhat_emp1/ee-ansible-ssa:2.x.x.x
 #   includes:
 #    hpeOneView                8.1.0     HPE OneView Python Library
 #    hpICsp                    1.0.2     HP Insight Control Server Provisioning Python Library
@@ -40,8 +39,15 @@ into   collections/ansible_collections/portfoliossa/bcl
 #       ##collections_paths = ./collections
 
 
+# configuration:
+I'm using this repo with an additional, private configuration repository, found in the directory as ./bcl_setup_config
+this directory provides private and public ssh-keys, credentials and an extra_vars file. For your convenience i moved 
+the extra_vars.yml file into this current repository. It references vault_ -variables, which you would need to set up 
+yourself. 
+
+
 Before starting download ansible-automation-platform-setup-2.3-2.tar.gz 
-and ensure the that within bcl_setup_config/extra_vars.yml
+and ensure the that within ./extra_vars.yml
 controller_version: "2.3-2"
 is set correctly and accordingly.
 
@@ -64,13 +70,13 @@ echo ". ./bcl_setup_config/env.sh"
 Usage: 
 
 # Setting up AAP (including bastion host)
-ansible-navigator run bcl-install.yml -e @bcl_setup_config/extra_vars.yml -e @bcl_setup_config/vaulted_vars.yml --eei bcl-ov:4 --pp never
+ansible-navigator run bcl-install.yml -e @extra_vars.yml -e @bcl_setup_config/vaulted_vars.yml --eei bcl-ov:4 --pp never
 
 # Setting up ESXi, vCenter and VMware
-ansible-navigator run bcl-vmw-setup.yml -e @bcl_setup_config/extra_vars.yml -e @bcl_setup_config/vaulted_vars.yml --eei localhost/bcl-ov:4 --pp never
+ansible-navigator run bcl-vmw-setup.yml -e @extra_vars.yml -e @bcl_setup_config/vaulted_vars.yml --eei localhost/bcl-ov:4 --pp never
 
 # Adding Usecases into AAP
-still missing
+see seperate repo
 
 For all 3 plays you can add:
 -e remove=true		removes the artifacts created
