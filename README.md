@@ -70,10 +70,10 @@ echo ". ./bcl_setup_config/env.sh"
 Usage: 
 
 # Setting up AAP (including bastion host)
-ansible-navigator run bcl-install.yml -e @extra_vars.yml -e @bcl_setup_config/vaulted_vars.yml --eei bcl-ov:4 --pp never
+ansible-navigator run 01-bcl-install.yml -e @extra_vars.yml -e @bcl_setup_config/vaulted_vars.yml --eei bcl-ov:4 --pp never
 
 # Setting up ESXi, vCenter and VMware
-ansible-navigator run bcl-vmw-setup.yml -e @extra_vars.yml -e @bcl_setup_config/vaulted_vars.yml --eei localhost/bcl-ov:4 --pp never
+ansible-navigator run 02-bcl-vmw-setup.yml -e @extra_vars.yml -e @bcl_setup_config/vaulted_vars.yml --eei localhost/bcl-ov:4 --pp never
 
 # Adding Usecases into AAP
 see seperate repo
