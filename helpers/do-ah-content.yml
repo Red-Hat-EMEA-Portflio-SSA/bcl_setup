@@ -4,13 +4,6 @@
 - hosts: localhost
   gather_facts: false
 
-  collections:
-    - ansible.controller
-    - ansible.utils
-    - ansible.core
-    - portfoliossa.bcl
-    - portfoliossa.nsupdate
-
   tasks:
 #- import_playbook: automationhub-content.yml
 #  when:
