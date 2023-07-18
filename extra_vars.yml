@@ -119,7 +119,7 @@ bastion_instance_parameters:
   vmware_dns_server1: '10.11.0.13'
   # vmware_dns_server2:
   vmware_network: "DPortGroup_NW1055_HIT_rh_bcl_core"
-  vmware_instance_diskgb: '35'
+  vmware_instance_diskgb: '90'
   vmware_instance_memmb: '8192'
   vmware_instance_cpus: '2'
 
