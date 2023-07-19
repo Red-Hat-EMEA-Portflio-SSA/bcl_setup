@@ -1,4 +1,4 @@
 ---
-- import_playbook: inventory_prep.yml
+- import_playbook: ../inventory_prep.yml
 
-- import_playbook: vcenter-prepare.yml
+- import_playbook: ../vcenter-prepare.yml

@@ -1,23 +1,23 @@
 ---
-- import_playbook: inventory_prep.yml
+- import_playbook: ../inventory_prep.yml
 
 - hosts: localhost
   gather_facts: false
 
   tasks:
-#- import_playbook: automationhub-content.yml
-#  when:
-#    - not remove | default ('false') | bool
-#    - controller_ah_enable | default ('false') | bool
-    
+# - import_playbook: ../automationhub-content.yml
+#   when:
+#     - not remove | default ('false') | bool
+#     - controller_ah_enable | default ('false') | bool
+
 - name: configure automation hub content
   become: true
   hosts:
     - automation_hub
   tasks:
-    - name: Deploy BCL specific automation hub content 
+    - name: Deploy BCL specific automation hub content
       ansible.builtin.include_role:
         name: ansible_ssa.general.automationhub_content
       vars:
-        ansible_ssa_ee_image:  "{{ ah_ee_image_source }}"
-        ah_ee_image:           "{{  ah_ee_image_dest }}"
+        ansible_ssa_ee_image: "{{ ah_ee_image_source }}"
+        ah_ee_image:          "{{ ah_ee_image_dest }}"

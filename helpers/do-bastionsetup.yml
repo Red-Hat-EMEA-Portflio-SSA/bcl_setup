@@ -1,7 +1,7 @@
 ---
-- import_playbook: inventory_prep.yml
+- import_playbook: ../inventory_prep.yml
 
-- import_playbook: bastion-setup.yml
+- import_playbook: ../bastion-setup.yml
   when: 
     - not remove | default ('false') | bool
     - bastion_enable | default ('false') | bool
