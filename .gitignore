@@ -1,5 +1,6 @@
 collections/ansible_collections/
-VMware-VMvisor-Installer-*.iso
-ansible-automation-platform-setup*tar.gz
-ansible-automation-platform-setup*tgz
+files/VMware-VMvisor-Installer-*.iso
+files/VMware-tools-*
+files/ansible-automation-platform-setup*tar.gz
+files/ansible-automation-platform-setup*tgz
 bcl_setup_config/
