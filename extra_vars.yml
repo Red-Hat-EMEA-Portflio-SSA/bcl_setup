@@ -73,6 +73,7 @@ manage_bios: false
 # VMware Install related vars
 ###cust_iso_file: custom_esxi.iso
 local_vmware_isoimage: "./files/VMware-VMvisor-Installer-7.0U2a-17867351.x86_64.iso"
+local_vmware_tools_win: "./files/VMware-tools-12.2.5-21855600-x86_64.exe.zip"
 bastion_get_url: "http://{{ hostvars.bastion_host.ansible_host }}/isos"
 bastion_iso_dir: /var/www/html/isos
 bastion_firmware_dir: /var/www/html/firmware
