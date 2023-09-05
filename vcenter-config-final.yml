@@ -12,7 +12,7 @@
         validate_certs: "{{ bclvmw_validate_certs }}"
         esxi_hostname: "{{ host_ip }}"
         ntp_servers:
-            - 10.6.55.4
+          - 10.6.55.4
       delegate_to: localhost
 
     - name: Start ntpd service setting for all ESXi Host in given Cluster
@@ -22,13 +22,32 @@
         password: "{{ bclvmw_password }}"
         validate_certs: "{{ bclvmw_validate_certs }}"
         cluster_name: "{{ bclvmw_clustername }}"
-        service_name: ntpd    
+        service_name: ntpd
         state: start
-        service_policy: on
+        service_policy: 'on'
       delegate_to: localhost
       run_once: true
 
-    - name: Enable vMotion on all vmkernel adapters of the cluster
+    - name: Add Host to dVS
+      community.vmware.vmware_dvs_host:
+        hostname: "{{ bclvmw_host }}"
+        username: "{{ bclvmw_username }}"
+        password: "{{ bclvmw_password }}"
+        validate_certs: "{{ bclvmw_validate_certs }}"
+        esxi_hostname: "{{ host_ip }}"
+        switch_name: "{{ bclvmw_vswitchname }}"
+        vmnics:
+          - vmnic0
+        state: present
+      delegate_to: localhost
+      throttle: 1 # this configure the task so it runs without concurrency as vCenter API doesn't like that
+
+##################
+## Next task fail in all hosts with following meesage:
+## fatal: [rh-bctl-1-gen9 -> localhost]: FAILED! => {"changed": false, "msg": "An error occurred while communicating with the remote host."}
+##################
+
+    - name: Enable vMotion, Management and vSAN traffic on all vmkernel adapters of the cluster
       community.vmware.vmware_vmkernel:
         hostname: "{{ bclvmw_host }}"
         username: "{{ bclvmw_username }}"
@@ -73,6 +92,5 @@
    #     vsan_auto_claim_storage: true
    #   delegate_to: localhost
    #   run_once: true
-  
-  
+
 ###      when: bclvmw_enable | default('false') | bool
