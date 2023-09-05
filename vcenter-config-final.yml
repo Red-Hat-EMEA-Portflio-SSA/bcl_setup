@@ -54,8 +54,8 @@
         password: "{{ bclvmw_password }}"
         validate_certs: "{{ bclvmw_validate_certs }}"
         esxi_hostname: "{{ host_ip }}"
-        vswitch_name: vswitch0 # dvswitch_name: "{{ bclvmw_vswitchname }}"
-        # portgroup_name: "{{ bclvmw_portgroupname }}"
+        dvswitch_name: "{{ bclvmw_vswitchname }}"
+        portgroup_name: "{{ bclvmw_portgroupname }}"
         state: present
         device: vmk0
         enable_vmotion: true
