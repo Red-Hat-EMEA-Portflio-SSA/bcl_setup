@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "bcl_setup/collections/ansible_collections/portfoliossa/bcl"
+		},
+		{
+			"path": "bcl_setup/collections/ansible_collections/portfoliossa/nsupdate"
+		},
+		{
+			"path": "bcl_setup/collections/ansible_collections/portfoliossa/resolver"
+		}
+	],
+	"settings": {}
+}
