@@ -14,6 +14,8 @@
         ntp_servers:
           - 10.6.55.4
       delegate_to: localhost
+      when:
+       - not remove | default ('false') | bool
 
     - name: Start ntpd service setting for all ESXi Host in given Cluster
       community.vmware.vmware_host_service_manager:
@@ -27,6 +29,8 @@
         service_policy: 'on'
       delegate_to: localhost
       run_once: true
+      when:
+       - not remove | default ('false') | bool
 
     - name: Add Host to dVS
       community.vmware.vmware_dvs_host:
@@ -41,6 +45,8 @@
         state: present
       delegate_to: localhost
       throttle: 1 # this configure the task so it runs without concurrency as vCenter API doesn't like that
+      when:
+       - not remove | default ('false') | bool
 
 ##################
 ## Next task fail in all hosts with following meesage:
@@ -66,6 +72,8 @@
           type: static
           subnet_mask: 255.255.255.0
       delegate_to: localhost
+      when:
+       - not remove | default ('false') | bool
 
     - name: Enable DRS
       community.vmware.vmware_cluster_drs:
@@ -79,6 +87,8 @@
         enable: true
       delegate_to: localhost
       run_once: true
+      when:
+       - not remove | default ('false') | bool
 
    # - name: Enable vSAN and claim storage automatically
    #   community.vmware.vmware_cluster_vsan:
@@ -92,5 +102,7 @@
    #     vsan_auto_claim_storage: true
    #   delegate_to: localhost
    #   run_once: true
+   #   when:
+   #    - not remove | default ('false') | bool
 
 ###      when: bclvmw_enable | default('false') | bool
