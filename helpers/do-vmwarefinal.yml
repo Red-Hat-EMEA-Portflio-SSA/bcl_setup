@@ -1,0 +1,7 @@
+---
+- import_playbook: ../inventory_prep.yml
+
+- import_playbook: ../vcenter-config-final.yml
+  when:
+#    - bastion_enable | default ('false') | bool
+    - not remove | default ('false') | bool
