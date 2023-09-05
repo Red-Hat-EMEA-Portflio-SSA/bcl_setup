@@ -73,9 +73,19 @@
   when:
     - not remove | default ('false') | bool
 
+- import_playbook: vcenter-config-final.yml
+  when:
+    - not remove | default ('false') | bool
+
+
 # remove
   # the "un" will be dealt with within the playbook 
   # or within the respective roles
+
+- import_playbook: vcenter-config-final.yml
+  when:
+    - remove | default ('false') | bool
+
 - import_playbook: add-esxi-to-vcenter.yml
   when:
     - remove | default ('false') | bool

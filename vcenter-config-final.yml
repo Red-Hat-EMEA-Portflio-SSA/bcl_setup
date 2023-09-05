@@ -1,0 +1,24 @@
+---
+- name: final config of ESXi hosts
+  hosts: esx_hosts
+  
+  
+- name: Vcenter prepare
+  hosts: vcenter
+  gather_facts: false
+
+  tasks:
+    - name: Prepare and configure vcenter
+      ansible.builtin.include_role:
+        name: portfoliossa.bcl.vcenter_prepare
+      vars:
+        vcenter_hostname: "{{ bclvmw_host }}"
+        vcenter_username: "{{ bclvmw_username }}"
+        vcenter_password: "{{ bclvmw_password }}"
+        vcenter_validate_certs: "{{ bclvmw_validate_certs }}"
+        vcenter_datacentername: "{{ bclvmw_datacentername }}"
+        vcenter_clustername: "{{ bclvmw_clustername }}"
+        vcenter_vswitchname: "{{ bclvmw_vswitchname }}"
+        vcenter_portgroupname: "{{ bclvmw_portgroupname }}"
+        vcenter_vlanid: "{{ bclvmw_vlanid }}"
+      when: bclvmw_enable | default('false') | bool
