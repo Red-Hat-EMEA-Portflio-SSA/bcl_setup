@@ -1,6 +1,64 @@
 ---
 - name: final config of ESXi hosts
   hosts: esx_hosts
+
+  tasks:
+
+    - name: Configure NTP servers for an ESXi Host
+      delegate_to: localhost
+      loop: groups['esx']
+      community.vmware.vmware_host_ntp:
+        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+        username: "{{ lookup('env', 'VMWARE_USER') }}"
+        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+        esxi_hostname: "{{ item }}"
+        ntp_servers:
+            - 10.6.55.4
+
+    - name: Enable vMotion on all vmkernel adapters of the cluster
+      loop: "{{ my_esxi_hosts }}"
+      community.vmware.vmware_vmkernel:
+        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+        username: "{{ lookup('env', 'VMWARE_USER') }}"
+        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+        validate_certs: false
+        esxi_hostname: "{{ item }}"
+        dvswitch_name: "{{ my_vmware_vswitch }}"
+        portgroup_name: "{{ my_vmware_portgroup }}"
+        state: present
+        device: vmk0
+        enable_vmotion: true
+        enable_mgmt: true
+        enable_vsan: true
+        network:
+          ip_address: "{{ item }}"
+          type: static
+          subnet_mask: 255.255.255.0
+      delegate_to: localhost
+
+    - name: Enable DRS
+      community.vmware.vmware_cluster_drs:
+        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+        username: "{{ lookup('env', 'VMWARE_USER') }}"
+        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+        validate_certs: false
+        datacenter_name: "{{ my_vmware_datacenter_name }}"
+        cluster_name: "{{ my_vmware_cluster_name }}"
+        drs_default_vm_behavior: fullyAutomated
+        enable: true
+      delegate_to: localhost
+
+   # - name: Enable vSAN and claim storage automatically
+   #   community.vmware.vmware_cluster_vsan:
+   #     hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+   #     username: "{{ lookup('env', 'VMWARE_USER') }}"
+   #     password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+   #     validate_certs: false
+   #     datacenter_name: "{{ my_vmware_datacenter_name }}"
+   #     cluster_name: "{{ my_vmware_cluster_name }}"
+   #     enable: true
+   #     vsan_auto_claim_storage: true
+   #   delegate_to: localhost
   
   
 - name: Vcenter prepare
