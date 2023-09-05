@@ -1,82 +1,78 @@
 ---
 - name: final config of ESXi hosts
   hosts: esx_hosts
+  gather_facts: false
 
   tasks:
-
     - name: Configure NTP servers for an ESXi Host
-      delegate_to: localhost
-      loop: groups['esx']
       community.vmware.vmware_host_ntp:
-        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
-        username: "{{ lookup('env', 'VMWARE_USER') }}"
-        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
-        esxi_hostname: "{{ item }}"
+        hostname: "{{ bclvmw_host }}"
+        username: "{{ bclvmw_username }}"
+        password: "{{ bclvmw_password }}"
+        validate_certs: "{{ bclvmw_validate_certs }}"
+        esxi_hostname: "{{ host_ip }}"
         ntp_servers:
             - 10.6.55.4
+      delegate_to: localhost
+
+    - name: Start ntpd service setting for all ESXi Host in given Cluster
+      community.vmware.vmware_host_service_manager:
+        hostname: "{{ bclvmw_host }}"
+        username: "{{ bclvmw_username }}"
+        password: "{{ bclvmw_password }}"
+        validate_certs: "{{ bclvmw_validate_certs }}"
+        cluster_name: "{{ bclvmw_clustername }}"
+        service_name: ntpd    
+        state: start
+        service_policy: on
+      delegate_to: localhost
+      run_once: true
 
     - name: Enable vMotion on all vmkernel adapters of the cluster
-      loop: "{{ my_esxi_hosts }}"
       community.vmware.vmware_vmkernel:
-        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
-        username: "{{ lookup('env', 'VMWARE_USER') }}"
-        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
-        validate_certs: false
-        esxi_hostname: "{{ item }}"
-        dvswitch_name: "{{ my_vmware_vswitch }}"
-        portgroup_name: "{{ my_vmware_portgroup }}"
+        hostname: "{{ bclvmw_host }}"
+        username: "{{ bclvmw_username }}"
+        password: "{{ bclvmw_password }}"
+        validate_certs: "{{ bclvmw_validate_certs }}"
+        esxi_hostname: "{{ host_ip }}"
+        dvswitch_name: "{{ bclvmw_vswitchname }}"
+        portgroup_name: "{{ bclvmw_portgroupname }}"
         state: present
         device: vmk0
         enable_vmotion: true
         enable_mgmt: true
         enable_vsan: true
         network:
-          ip_address: "{{ item }}"
+          ip_address: "{{ host_ip }}"
           type: static
           subnet_mask: 255.255.255.0
       delegate_to: localhost
 
     - name: Enable DRS
       community.vmware.vmware_cluster_drs:
-        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
-        username: "{{ lookup('env', 'VMWARE_USER') }}"
-        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
-        validate_certs: false
-        datacenter_name: "{{ my_vmware_datacenter_name }}"
-        cluster_name: "{{ my_vmware_cluster_name }}"
+        hostname: "{{ bclvmw_host }}"
+        username: "{{ bclvmw_username }}"
+        password: "{{ bclvmw_password }}"
+        validate_certs: "{{ bclvmw_validate_certs }}"
+        datacenter_name: "{{ bclvmw_datacentername }}"
+        cluster_name: "{{ bclvmw_clustername }}"
         drs_default_vm_behavior: fullyAutomated
         enable: true
       delegate_to: localhost
+      run_once: true
 
    # - name: Enable vSAN and claim storage automatically
    #   community.vmware.vmware_cluster_vsan:
-   #     hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
-   #     username: "{{ lookup('env', 'VMWARE_USER') }}"
-   #     password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
-   #     validate_certs: false
-   #     datacenter_name: "{{ my_vmware_datacenter_name }}"
-   #     cluster_name: "{{ my_vmware_cluster_name }}"
+   #     hostname: "{{ bclvmw_host }}"
+   #     username: "{{ bclvmw_username }}"
+   #     password: "{{ bclvmw_password }}"
+   #     validate_certs: "{{ bclvmw_validate_certs }}"
+   #     datacenter_name: "{{ bclvmw_datacentername }}"
+   #     cluster_name: "{{ bclvmw_clustername }}"
    #     enable: true
    #     vsan_auto_claim_storage: true
    #   delegate_to: localhost
+   #   run_once: true
   
   
-- name: Vcenter prepare
-  hosts: vcenter
-  gather_facts: false
-
-  tasks:
-    - name: Prepare and configure vcenter
-      ansible.builtin.include_role:
-        name: portfoliossa.bcl.vcenter_prepare
-      vars:
-        vcenter_hostname: "{{ bclvmw_host }}"
-        vcenter_username: "{{ bclvmw_username }}"
-        vcenter_password: "{{ bclvmw_password }}"
-        vcenter_validate_certs: "{{ bclvmw_validate_certs }}"
-        vcenter_datacentername: "{{ bclvmw_datacentername }}"
-        vcenter_clustername: "{{ bclvmw_clustername }}"
-        vcenter_vswitchname: "{{ bclvmw_vswitchname }}"
-        vcenter_portgroupname: "{{ bclvmw_portgroupname }}"
-        vcenter_vlanid: "{{ bclvmw_vlanid }}"
-      when: bclvmw_enable | default('false') | bool
+###      when: bclvmw_enable | default('false') | bool
