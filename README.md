@@ -84,3 +84,23 @@ For all 3 plays you can add:
 
 
 I've added some test-.. plays to the repo. Most likely they are not needed anymore, but their existance does not harm either.
+
+#Notes:
+
+IMPORTANT: latest ee version is bcl-ov:16
+
+Latest changes are:
+
+1.- Updating the  porfoliossa.bcl.vcenter_prepare role so the task with the module community.vmware.vmware_dvswitch specifies the input switch_version: "7.0.2" (it needs to match the version on the ESXi hosts)
+
+2.- Create a new execution environment with the updated role >> quay.io/mschreie/bcl-ov:15
+
+3.- Update the vcenter-config-final.yml playbook so hosts are added to the Virtual Distributed Switch
+
+4.- WORK IN PROGRESS: we need to move the vmk0 to our virtual distributed switch as those are automatically assigned to vSwitch0. Also may be a good idea to modify the Virtual Distributed Switch configuration so it has 6 uplinks. I'm stucked at this step, can't do it with ansible nor vCenter GUI
+
+Future tasks:
+
+1.- We need to check if the remove option still works after all the changes to the Virtual Distributed Switch configuration
+
+2.- Instead of hardcoding the Virtual Distributed Switch version we may want to input it as a variable (the porfoliossa.bcl.vcenter_prepare role would need to be updated in task with module community.vmware.vmware_dvswitch)
