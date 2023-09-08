@@ -55,27 +55,27 @@
 ##
 ##################
 
-    - name: Enable vMotion, Management and vSAN traffic on all vmkernel adapters of the cluster
-      community.vmware.vmware_vmkernel:
-        hostname: "{{ bclvmw_host }}"
-        username: "{{ bclvmw_username }}"
-        password: "{{ bclvmw_password }}"
-        validate_certs: "{{ bclvmw_validate_certs }}"
-        esxi_hostname: "{{ host_ip }}"
-        dvswitch_name: "{{ bclvmw_vswitchname }}"
-        portgroup_name: "{{ bclvmw_portgroupname }}"
-        state: present
-        device: vmk0
-        enable_vmotion: true
-        enable_mgmt: true
-        enable_vsan: true
-        network:
-          ip_address: "{{ host_ip }}"
-          type: static
-          subnet_mask: 255.255.255.0
-      delegate_to: localhost
-      when:
-       - not remove | default ('false') | bool
+  #  - name: Enable vMotion, Management and vSAN traffic on all vmkernel adapters of the cluster
+  #    community.vmware.vmware_vmkernel:
+  #      hostname: "{{ bclvmw_host }}"
+  #      username: "{{ bclvmw_username }}"
+  #      password: "{{ bclvmw_password }}"
+  #      validate_certs: "{{ bclvmw_validate_certs }}"
+  #      esxi_hostname: "{{ host_ip }}"
+  #      dvswitch_name: "{{ bclvmw_vswitchname }}"
+  #      portgroup_name: "{{ bclvmw_portgroupname }}"
+  #      state: present
+  #      device: vmk0
+  #      enable_vmotion: true
+  #      enable_mgmt: true
+  #      enable_vsan: true
+  #      network:
+  #        ip_address: "{{ host_ip }}"
+  #        type: static
+  #        subnet_mask: 255.255.255.0
+  #    delegate_to: localhost
+  #    when:
+  #     - not remove | default ('false') | bool
 
     - name: Enable DRS
       community.vmware.vmware_cluster_drs:
