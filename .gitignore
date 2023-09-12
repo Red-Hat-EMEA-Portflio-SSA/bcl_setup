@@ -5,3 +5,4 @@ files/ansible-automation-platform-setup*tar.gz
 files/ansible-automation-platform-setup*tgz
 bcl_setup_config/
 vaulted_vars.yml
+ansible.cfg
