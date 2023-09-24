@@ -12,8 +12,9 @@ ansible-navigator:
       - VMWARE_PASSWORD
         #image: quay.io/redhat_emp1/ee-ansible-ssa:unstable
         ## image: quay.io/redhat_emp1/ee-ansible-ssa:latest
+    image: quay.io/mschreie/bcl-ov:latest
     pull:
-      policy: never
+      policy: missing
   logging:
     append: true
     file: /tmp/navigator/ansible-navigator_bcl.log
