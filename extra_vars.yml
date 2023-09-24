@@ -72,8 +72,10 @@ manage_bios: false
   
 # VMware Install related vars
 ###cust_iso_file: custom_esxi.iso
-local_vmware_isoimage: "./files/VMware-VMvisor-Installer-7.0U2a-17867351.x86_64.iso"
-local_vmware_tools_win: "./files/VMware-tools-12.2.5-21855600-x86_64.exe.zip"
+# local_vmware_isoimage: "./files/VMware-VMvisor-Installer-7.0U2a-17867351.x86_64.iso"
+# local_vmware_tools_win: "./files/VMware-tools-12.2.5-21855600-x86_64.exe.zip"
+local_vmware_isoimage: "./files/VMware-VMvisor-Installer-7.0U3n-21930508.x86_64.iso"
+local_vmware_tools_win: "./files/VMware-tools-12.3.0-22234872-x86_64.exe.zip"
 bastion_get_url: "http://{{ hostvars.bastion_host.ansible_host }}/isos"
 bastion_iso_dir: /var/www/html/isos
 bastion_firmware_dir: /var/www/html/firmware
@@ -91,11 +93,12 @@ bastion_firmware_dir: /var/www/html/firmware
 ## firmware_baseline_name: "HPE Synergy Custom SPP 2018110 2019 02 15"
 
 # adjustable VMware installation related vars:
-org_iso:  "{{ bastion_iso_dir }}/VMware-VMvisor-Installer-7.0U2a-17867351.x86_64.iso"
+#org_iso:  "{{ bastion_iso_dir }}/VMware-VMvisor-Installer-7.0U2a-17867351.x86_64.iso"
+org_iso:  "{{ bastion_iso_dir }}/VMware-VMvisor-Installer-7.0U3n-21930508.x86_64.iso"
 cust_iso: "{{ bastion_iso_dir }}/{{ cust_iso_file }}"
 esxi_rootpw: "{{ vault_esxi_rootpw }}"
 
-# fixed WMware installation related vars:
+# fixed VMware installation related vars:
 mnt_dir:  /esxi_cdrom_mount
 wrk_dir:  /esxi_cdrom
 # ks_template: ks.cfg.j2 # defined as default in the role 
