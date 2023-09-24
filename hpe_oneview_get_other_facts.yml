@@ -1,28 +1,31 @@
 ---
-- hosts: localhost
-  gather_facts: false
+##- hosts: localhost
+##  gather_facts: false
+##
+##  collections:
+##    - ansible.controller
+##
+##  tasks:
+##
+##    - name: Add OneView Host to inventory
+##      add_host:
+##        name: "{{ item.name }}"
+##        ansible_host: "{{ item.host_ip | default (omit)  }}"
+##        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
+##      loop: "{{ inventory_hosts }}"
+##
+##    - name: Add OneView Host to inventory
+##      add_host:
+##        name: "{{ item.name }}"
+##        ansible_host: "{{ item.host_ip | default (omit)  }}"
+##        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
+##        ilo_ip: "{{ item.ilo_ip | default (omit) }}"
+##        groups: 
+##          - "esx_hosts"
+##          - "oneview_targets"
+##      loop: "{{ esx_hosts }}"
 
-  collections:
-    - ansible.controller
-
-  tasks:
-    - name: Add OneView Host to inventory
-      add_host:
-        name: "{{ item.name }}"
-        ansible_host: "{{ item.host_ip | default (omit)  }}"
-        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
-      loop: "{{ inventory_hosts }}"
-
-    - name: Add OneView Host to inventory
-      add_host:
-        name: "{{ item.name }}"
-        ansible_host: "{{ item.host_ip | default (omit)  }}"
-        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
-        ilo_ip: "{{ item.ilo_ip | default (omit) }}"
-        groups: 
-          - "esx_hosts"
-          - "oneview_targets"
-      loop: "{{ oneview_machines }}"
+- import_playbook: inventory_prep.yml
 
 - hosts: esx_hosts
   gather_facts: false
