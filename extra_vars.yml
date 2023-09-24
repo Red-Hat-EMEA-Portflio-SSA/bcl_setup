@@ -28,7 +28,7 @@ inventory_hosts:
   - name: oneview_host 
     host_ip: oneview.bcl.redhat.hpecic.com
 
-oneview_machines: 
+esx_hosts: 
   - name: rh-bctl-1-gen9
     ilo_ip:  "10.6.55.201"
     host_ip: "10.6.54.201"
@@ -54,14 +54,14 @@ oneview_machines:
     host_mask: "255.255.255.0"
     host_gw: "10.6.54.1"
     host_nameserver: "{{ bastion_named_serverip }}"
-  - name: rh-bctl-4-gen9
-    ilo_ip:  "10.6.55.204"
-    host_ip: "10.6.54.204"
-    host_nic: vmnic4
-    host_bootproto: 'static'
-    host_mask: "255.255.255.0"
-    host_gw: "10.6.54.1"
-    host_nameserver: "{{ bastion_named_serverip }}"
+#  - name: rh-bctl-4-gen9
+#    ilo_ip:  "10.6.55.204"
+#    host_ip: "10.6.54.204"
+#    host_nic: vmnic4
+#    host_bootproto: 'static'
+#    host_mask: "255.255.255.0"
+#    host_gw: "10.6.54.1"
+#    host_nameserver: "{{ bastion_named_serverip }}"
 
 # Oneview configuration
 ov_template: BCL

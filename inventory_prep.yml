@@ -34,8 +34,7 @@
         host_nameserver: "{{ item.host_nameserver | default (omit) }}"
         groups: 
           - "esx_hosts"
-          - "oneview_targets"
-      loop: "{{ oneview_machines }}"
+      loop: "{{ esx_hosts }}"
 
     - name: Add additional Host to inventory
       add_host:
