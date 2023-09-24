@@ -41,7 +41,7 @@
         esxi_hostname: "{{ host_ip }}"
         switch_name: "{{ bclvmw_vswitchname }}"
         vmnics:
-          - vmnic0
+          - vmnic5
         state: present
       delegate_to: localhost
       throttle: 1 # this configure the task so it runs without concurrency as vCenter API doesn't like that
@@ -52,30 +52,31 @@
 ##
 ## Next task fail in all hosts with following meesage:
 ## fatal: [rh-bctl-1-gen9 -> localhost]: FAILED! => {"changed": false, "msg": "An error occurred while communicating with the remote host."}
-##
+## switched to DHCP => hosts inaccesible and timeout
 ##################
 
-  #  - name: Enable vMotion, Management and vSAN traffic on all vmkernel adapters of the cluster
-  #    community.vmware.vmware_vmkernel:
-  #      hostname: "{{ bclvmw_host }}"
-  #      username: "{{ bclvmw_username }}"
-  #      password: "{{ bclvmw_password }}"
-  #      validate_certs: "{{ bclvmw_validate_certs }}"
-  #      esxi_hostname: "{{ host_ip }}"
-  #      dvswitch_name: "{{ bclvmw_vswitchname }}"
-  #      portgroup_name: "{{ bclvmw_portgroupname }}"
-  #      state: present
-  #      device: vmk0
-  #      enable_vmotion: true
-  #      enable_mgmt: true
-  #      enable_vsan: true
-  #      network:
-  #        ip_address: "{{ host_ip }}"
-  #        type: static
-  #        subnet_mask: 255.255.255.0
-  #    delegate_to: localhost
-  #    when:
-  #     - not remove | default ('false') | bool
+#    - name: Enable vMotion, Management and vSAN traffic on all vmkernel adapters of the cluster
+#      community.vmware.vmware_vmkernel:
+#        hostname: "{{ bclvmw_host }}"
+#        username: "{{ bclvmw_username }}"
+#        password: "{{ bclvmw_password }}"
+#        validate_certs: "{{ bclvmw_validate_certs }}"
+#        esxi_hostname: "{{ host_ip }}"
+#        dvswitch_name: "{{ bclvmw_vswitchname }}"
+#        portgroup_name: "{{ bclvmw_portgroupname }}"
+#        state: present
+#        device: vmk0
+#        enable_vmotion: true
+#        enable_mgmt: true
+#        enable_vsan: true
+#        network:
+#          type: dhcp
+#          # ip_address: "{{ host_ip }}"
+#          # type: static
+#          # subnet_mask: 255.255.255.0
+#      delegate_to: localhost
+#      when:
+#       - not remove | default ('false') | bool
 
     - name: Enable DRS
       community.vmware.vmware_cluster_drs:
@@ -92,19 +93,19 @@
       when:
        - not remove | default ('false') | bool
 
-   # - name: Enable vSAN and claim storage automatically
-   #   community.vmware.vmware_cluster_vsan:
-   #     hostname: "{{ bclvmw_host }}"
-   #     username: "{{ bclvmw_username }}"
-   #     password: "{{ bclvmw_password }}"
-   #     validate_certs: "{{ bclvmw_validate_certs }}"
-   #     datacenter_name: "{{ bclvmw_datacentername }}"
-   #     cluster_name: "{{ bclvmw_clustername }}"
-   #     enable: true
-   #     vsan_auto_claim_storage: true
-   #   delegate_to: localhost
-   #   run_once: true
-   #   when:
-   #    - not remove | default ('false') | bool
+    - name: Enable vSAN and claim storage automatically
+      community.vmware.vmware_cluster_vsan:
+        hostname: "{{ bclvmw_host }}"
+        username: "{{ bclvmw_username }}"
+        password: "{{ bclvmw_password }}"
+        validate_certs: "{{ bclvmw_validate_certs }}"
+        datacenter_name: "{{ bclvmw_datacentername }}"
+        cluster_name: "{{ bclvmw_clustername }}"
+        enable: true
+        vsan_auto_claim_storage: true
+      delegate_to: localhost
+      run_once: true
+      when:
+       - not remove | default ('false') | bool
 
 ###      when: bclvmw_enable | default('false') | bool
