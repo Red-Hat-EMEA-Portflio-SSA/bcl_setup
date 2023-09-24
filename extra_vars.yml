@@ -315,8 +315,15 @@ bclvmw_validate_certs: false
 bclvmw_datacentername: "bcl"
 bclvmw_clustername: "bcl-cluster"
 bclvmw_vswitchname: "bcl-vswitch"
-bclvmw_portgroupname: "bcl-wrklds"
-bclvmw_vlanid: 1053
+#bclvmw_portgroupname: "bcl-wrklds"
+#bclvmw_vlanid: 1053
+bclvmw_portgroups: 
+  - name: "bcl-wrklds"
+    vlanid: 1053
+  - name: "bcl-mgmt"
+    vlanid: 0
+  - name: "bcl-core"
+    vlanid: 1055
 
 bclvmw_enable: true
 oneview_enable: true

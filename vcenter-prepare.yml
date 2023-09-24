@@ -15,6 +15,7 @@
         vcenter_datacentername: "{{ bclvmw_datacentername }}"
         vcenter_clustername: "{{ bclvmw_clustername }}"
         vcenter_vswitchname: "{{ bclvmw_vswitchname }}"
-        vcenter_portgroupname: "{{ bclvmw_portgroupname }}"
-        vcenter_vlanid: "{{ bclvmw_vlanid }}"
+        #vcenter_portgroupname: "{{ bclvmw_portgroupname }}"
+        #vcenter_vlanid: "{{ bclvmw_vlanid }}"
+        vcenter_portgroups: "{{ bclvmw_portgroups }}"
       when: bclvmw_enable | default('false') | bool
