@@ -119,8 +119,9 @@ bastion_instance_parameters:
   vmware_ip_address: '10.6.55.4'
   vmware_netmask: '255.255.255.0'
   vmware_gateway: '10.6.55.1'
+# parameter vmware_dns_server? is not used anywhere
     #vmware_dns_server1: '10.11.2.44'
-  vmware_dns_server1: '10.11.0.13'
+#  vmware_dns_server1: '10.11.0.13'
   # vmware_dns_server2:
   vmware_network: "DPortGroup_NW1055_HIT_rh_bcl_core"
   vmware_instance_diskgb: '90'
@@ -261,8 +262,9 @@ controller_instance_parameters:
   vmware_ip_address: '10.6.55.2'
   vmware_netmask: '255.255.255.0'
   vmware_gateway: '10.6.55.1'
+# parameter vmware_dns_server? is not used anywhere
     #vmware_dns_server1: '10.11.2.44'
-  vmware_dns_server1: '10.11.0.13'
+#  vmware_dns_server1: '10.11.0.13'
   # vmware_dns_server2:
   vmware_network: "DPortGroup_NW1055_HIT_rh_bcl_core"
 
@@ -290,8 +292,9 @@ controller_ah_instance_parameters:
   vmware_ip_address: '10.6.55.3'
   vmware_netmask: '255.255.255.0'
   vmware_gateway: '10.6.55.1'
+# parameter vmware_dns_server? is not used anywhere
     #vmware_dns_server1: '10.11.2.44'
-  vmware_dns_server1: '10.11.0.13'
+#  vmware_dns_server1: '10.11.0.13'
   # vmware_dns_server2:
   vmware_network: "DPortGroup_NW1055_HIT_rh_bcl_core"
 
