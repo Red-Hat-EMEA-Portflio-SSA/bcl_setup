@@ -10,6 +10,11 @@ ansible-navigator:
       - VMWARE_HOST
       - VMWARE_USER
       - VMWARE_PASSWORD
+      - VMWARE_VALIDATE_CERTS
+      - VCENTER_HOST
+      - VCENTER_USER
+      - VCENTER_PASSWORD
+      - VCENTER_VALIDATE_CERTS
         #image: quay.io/redhat_emp1/ee-ansible-ssa:unstable
         ## image: quay.io/redhat_emp1/ee-ansible-ssa:latest
     image: quay.io/mschreie/bcl-ov:latest
