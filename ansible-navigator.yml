@@ -19,7 +19,7 @@ ansible-navigator:
         ## image: quay.io/redhat_emp1/ee-ansible-ssa:latest
     image: quay.io/mschreie/bcl-ov:latest
     pull:
-      policy: missing
+      policy: always
   logging:
     append: true
     file: /tmp/navigator/ansible-navigator_bcl.log
